@@ -1,7 +1,5 @@
-// Add any JavaScript you need here
-
 document.addEventListener('DOMContentLoaded', function() {
-    // Example: Smooth scrolling for navigation
+    // Smooth scrolling for navigation
     const navLinks = document.querySelectorAll('nav ul li a');
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
