@@ -5,7 +5,8 @@ import type { LucideIcon } from 'lucide-react';
 
 type DashboardItem = {
   id: string;
-  icon: LucideIcon;
+  imgSrc?: string;
+  icon?: LucideIcon;
   label: string;
   color?: string;
 };
@@ -34,15 +35,19 @@ export default function Dashboard({ items, activeSection, theme, onToggleTheme }
               key={item.id}
               href={`#${item.id}`}
               aria-current={isActive ? 'page' : undefined}
-              className={`group/dash relative flex items-center justify-center rounded-full p-2.5 transition-all duration-300 sm:p-3 ${
+              className={`group/dash relative flex items-center justify-center rounded-full transition-all duration-300 p-1.5 sm:p-2 ${
                 isActive
-                  ? 'bg-[var(--page-text)] text-[var(--page-surface)] shadow-[0_12px_30px_rgba(16,32,58,0.18)]'
-                  : 'text-[var(--page-muted)] hover:bg-[var(--page-border)]'
+                  ? 'bg-black/10 dark:bg-white/15 shadow-[inset_0_1px_3px_rgba(0,0,0,0.1),0_8px_20px_rgba(0,0,0,0.08)]'
+                  : 'hover:bg-[var(--page-border)]'
               }`}
               style={{ '--dash-color': item.color } as React.CSSProperties}
               title={item.label}
             >
-              <item.icon size={18} strokeWidth={2.5} className={`transition-all duration-300 ${isActive ? 'scale-105' : 'group-hover/dash:scale-110'}`} />
+              {item.imgSrc ? (
+                 <img src={item.imgSrc} alt={item.label} className={`w-7 h-7 sm:w-8 sm:h-8 object-contain transition-all duration-300 drop-shadow-md ${isActive ? 'scale-105' : 'group-hover/dash:scale-110'}`} draggable={false} />
+              ) : item.icon && (
+                 <item.icon size={18} strokeWidth={2.5} className={`transition-all duration-300 ${isActive ? 'scale-105' : 'group-hover/dash:scale-110'}`} />
+              )}
               <span className="pointer-events-none absolute top-[52px] scale-95 rounded-xl border border-[var(--page-border)] bg-[var(--page-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--page-text)] opacity-0 shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-all drop-shadow-md backdrop-blur-xl group-hover/dash:scale-100 group-hover/dash:opacity-100">
                 {item.label}
               </span>

@@ -106,11 +106,11 @@ const WINDOW_LAYOUT: Record<string, string> = {
 };
 
 const dashboardItems = [
-  { id: 'about', icon: User, label: 'About', color: '#0ea5e9' },
-  { id: 'skills', icon: Code2, label: 'Skills', color: '#F7DF1E' },
-  { id: 'projects', icon: FolderCode, label: 'Projects', color: '#007ACC' },
-  { id: 'experience', icon: FileText, label: 'Experience', color: '#47A248' },
-  { id: 'contact', icon: Mail, label: 'Contact', color: '#EA4335' },
+  { id: 'about', imgSrc: 'https://raw.githubusercontent.com/puruvj/macos-web/main/public/app-icons/finder/256.png', label: 'About', color: '#0ea5e9' },
+  { id: 'skills', imgSrc: 'https://raw.githubusercontent.com/puruvj/macos-web/main/public/app-icons/vscode/256.png', label: 'Skills', color: '#F7DF1E' },
+  { id: 'projects', imgSrc: 'https://raw.githubusercontent.com/puruvj/macos-web/main/public/app-icons/notes/256.png', label: 'Projects', color: '#007ACC' },
+  { id: 'experience', imgSrc: 'https://raw.githubusercontent.com/puruvj/macos-web/main/public/app-icons/mail/256.png', label: 'Experience', color: '#47A248' },
+  { id: 'contact', imgSrc: 'https://raw.githubusercontent.com/puruvj/macos-web/main/public/app-icons/safari/256.png', label: 'Contact', color: '#EA4335' },
 ] as const;
 
 const aboutContacts: ContactPreview[] = [
