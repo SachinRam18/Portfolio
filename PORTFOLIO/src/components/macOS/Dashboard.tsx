@@ -25,9 +25,17 @@ export default function Dashboard({ items, activeSection, theme, onToggleTheme }
       className="pointer-events-none fixed inset-x-0 z-[2500] flex justify-center px-3"
       style={{ top: 'max(12px, env(safe-area-inset-top))' }}
     >
-      <nav className="glass-panel pointer-events-auto flex w-max max-w-full items-center gap-1 px-3 py-2 shadow-[0_18px_40px_rgba(0,0,0,0.12)] transition-colors duration-300 sm:gap-2 sm:px-4 sm:py-3">
-        {items.map((item) => {
-          const isActive = activeSection === item.id;
+      {/* Outer wrapper for drop-shadow and glow */}
+      <div className="relative pointer-events-auto rounded-[44px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(255,255,255,0.05)] ring-1 ring-black/5 dark:ring-white/10 overflow-hidden">
+        {/* The glass surface */}
+        <div className="absolute inset-0 z-0 bg-white/20 dark:bg-white/10 backdrop-blur-md" />
+        
+        {/* Inner glow effect for premium feel */}
+        <div className="absolute inset-0 z-0 rounded-[44px] shadow-[inset_0_1px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_rgba(255,255,255,0.1)] pointer-events-none" />
+
+        <nav className="relative z-10 flex w-max max-w-full items-center gap-1 px-3 py-2 transition-colors duration-300 sm:gap-2 sm:px-4 sm:py-3">
+          {items.map((item) => {
+            const isActive = activeSection === item.id;
 
           return (
             <a
@@ -69,6 +77,7 @@ export default function Dashboard({ items, activeSection, theme, onToggleTheme }
           Sachin Ram
         </span>
       </nav>
+      </div>
     </div>,
     document.body,
   );
