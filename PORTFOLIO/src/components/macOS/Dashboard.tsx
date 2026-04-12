@@ -73,7 +73,8 @@ export default function Dashboard({ items, activeSection, theme, onToggleTheme }
           </span>
         </button>
 
-        <span className="ml-1 hidden rounded-full border border-[var(--page-border)] bg-[var(--page-chip)] px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--page-text)] sm:inline-flex">
+        <span className="ml-1 hidden items-center gap-2 rounded-full border border-[var(--page-border)] bg-[var(--page-chip)] pl-1.5 pr-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--page-text)] sm:inline-flex">
+          <img src="/logo1.png" alt="Logo" className="w-5 h-5 rounded-full object-contain" />
           Sachin Ram
         </span>
       </nav>
