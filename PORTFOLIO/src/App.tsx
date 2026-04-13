@@ -68,6 +68,7 @@ type ContactPreview = {
   value: string;
   href: string;
   icon: LucideIcon;
+  color?: string;
 };
 
 type SkillGroup = {
@@ -261,8 +262,9 @@ function ExperiencePhoneMockup({
   const closePhoneApp = () => setOpenedApp(null);
 
   return (
-    <div className="scale-90 md:scale-[0.80] origin-center -my-10 lg:-my-24 drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
-      <DeviceFrameset device="Galaxy Note 8" color="black">
+          <div className="relative w-full h-[550px] sm:h-[650px] md:h-[750px] lg:h-[900px] flex justify-center mt-8">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 scale-[0.60] sm:scale-[0.75] md:scale-[0.80] lg:scale-[0.90] origin-top drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-transform duration-300">
+              <DeviceFrameset device="Galaxy Note 8" color="black">
         <div className="relative w-full h-full bg-cover bg-center overflow-hidden font-sans select-none" 
              style={{ background: 'linear-gradient(155deg, #cce4f7 0%, #78b8f2 50%, #8498f5 100%)', fontFamily: '"SF Pro Display", -apple-system, sans-serif' }}>
           
@@ -481,7 +483,8 @@ function ExperiencePhoneMockup({
 
         </div>
       </DeviceFrameset>
-    </div>
+            </div>
+          </div>
   );
 }
 
@@ -638,7 +641,7 @@ export default function App() {
       <GlassCursor />
       {/* Top Navigation / Status Bar (optional, currently we rely on Dashboard) */}
 
-      <section ref={heroRef} className="relative min-h-[128svh] overflow-hidden px-4 pb-12 pt-6 md:px-8 md:pt-8">
+      <section ref={heroRef} className="relative min-h-[90svh] overflow-hidden px-4 pb-12 pt-6 md:px-8 md:pt-8 md:min-h-[128svh]">
         <div className="hero-backdrop pointer-events-none absolute inset-0" />
         <div className="pointer-events-none absolute inset-0 opacity-100">
           <motion.div
@@ -658,7 +661,7 @@ export default function App() {
           />
         </div>
 
-        <div className="relative mx-auto flex min-h-[calc(128svh-3rem)] w-full max-w-[1500px] flex-col items-center justify-center gap-8 py-4">
+        <div className="relative mx-auto flex min-h-[calc(90svh-3rem)] md:min-h-[calc(128svh-3rem)] w-full max-w-[1500px] flex-col items-center justify-center gap-8 py-4">
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -696,7 +699,7 @@ export default function App() {
           </motion.div>
 
           <div
-            className={`macbook-scene relative mx-auto w-full max-w-[1100px] select-none ${isDraggingLaptop ? 'is-dragging' : ''}`}
+            className={`macbook-scene relative mx-auto w-full max-w-[1100px] select-none h-[300px] sm:h-[450px] md:h-[700px] lg:h-[850px] flex justify-center ${isDraggingLaptop ? 'is-dragging' : ''}`}
             style={
               {
                 '--scene-x': `${sceneOffset.x}px`,
@@ -711,7 +714,7 @@ export default function App() {
             onPointerCancel={onLaptopPointerUp}
             onDoubleClick={onLaptopDoubleClick}
           >
-            <div className="relative mx-auto flex select-none items-center justify-center pt-8 md:pt-14 overflow-hidden md:overflow-visible scale-[0.55] md:scale-95 origin-top pointer-events-auto">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 flex select-none items-start justify-center pt-4 md:pt-14 scale-[0.35] sm:scale-[0.48] md:scale-[0.80] lg:scale-[0.95] origin-top pointer-events-auto transition-transform duration-300 w-[1020px]">
               <DeviceFrameset device="MacBook Pro" color="silver">
                 <style>{`
                   .marvel-device.macbook .screen { background: transparent !important; border-radius: 12px; }
@@ -936,7 +939,12 @@ export default function App() {
 
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {skillGroups.map((group) => (
-              <div key={group.title} className="skill-group-card">
+              <motion.div 
+                key={group.title} 
+                className="skill-group-card will-change-transform"
+                whileHover={{ y: -8, scale: 1.02 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              >
                 <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--page-muted)]">
                   <Award size={13} />
                   {group.title}
@@ -960,7 +968,7 @@ export default function App() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </RevealCard>
@@ -974,7 +982,12 @@ export default function App() {
 
           <div className="mt-8 grid gap-5 lg:grid-cols-2">
             {projectCards.map((project) => (
-              <article key={project.title} className="project-card">
+              <motion.article 
+                key={project.title} 
+                className="project-card will-change-transform"
+                whileHover={{ y: -8, scale: 1.02 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              >
                 <div className="project-surface relative group/img overflow-hidden">
                   {project.image ? (
                     <img 
@@ -1002,7 +1015,7 @@ export default function App() {
                     ))}
                   </div>
                 </div>
-              </article>
+              </motion.article>
             ))}
           </div>
         </RevealCard>
@@ -1017,10 +1030,48 @@ export default function App() {
 
             <div className="mt-8 space-y-4">
               {experienceCards.map((experience) => (
-                <div key={experience.title} className="timeline-card items-start">
-                  <div>
-                    <p className="text-sm font-semibold text-[var(--page-text)]">{experience.title}</p>
-                    <p className="mt-1 text-sm text-[var(--page-muted)]">{experience.company}</p>
+                <motion.div 
+                  key={experience.title} 
+                  className="timeline-card flex items-start gap-4 will-change-transform"
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                >
+                  {experience.title.includes('Flutter') && (
+                    <motion.div
+                      animate={{ y: [-3, 3, -3], rotateZ: [-2, 2, -2], rotateX: [0, 10, 0] }}
+                      transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                      className="relative flex h-14 w-14 lg:h-16 lg:w-16 shrink-0 items-center justify-center rounded-[18px] bg-gradient-to-br from-[#02569B] to-[#54C5F8] shadow-[0_12px_24px_-8px_#02569B,inset_0_2px_4px_rgba(255,255,255,0.4)] border border-white/20 mt-1 perspective-[1000px] transform-view"
+                    >
+                      <svg width="60%" height="60%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ filter: 'drop-shadow(0px 4px 6px rgba(0,0,0,0.3))' }}>
+                        <path d="M14.314 0L2.3 12 6.6 16.3l12.014-12H14.314z" fill="#FFF" />
+                        <path d="M14.314 24h4.3L13.1 18.5l-4.4 4.2 5.614 1.3z" fill="#FFF" />
+                        <path d="M8.7 14.2l9.9 9.8h4.3L13.1 14.2z" fill="#FFF" opacity="0.8" />
+                      </svg>
+                      <div className="absolute inset-0 rounded-[18px] bg-gradient-to-tr from-transparent via-white/10 to-white/40 pointer-events-none" />
+                    </motion.div>
+                  )}
+                  {experience.title.includes('Java') && (
+                    <motion.div
+                      animate={{ y: [-3, 3, -3], rotateZ: [2, -2, 2], rotateX: [10, 0, 10] }}
+                      transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+                      className="relative flex h-14 w-14 lg:h-16 lg:w-16 shrink-0 items-center justify-center rounded-[18px] bg-gradient-to-br from-[#3DDC84] to-[#01875F] shadow-[0_12px_24px_-8px_#3DDC84,inset_0_2px_4px_rgba(255,255,255,0.4)] border border-white/20 mt-1 perspective-[1000px] transform-view"
+                    >
+                      <svg width="65%" height="65%" viewBox="0 0 24 24" fill="#FFF" xmlns="http://www.w3.org/2000/svg" style={{ filter: 'drop-shadow(0px 4px 6px rgba(0,0,0,0.3))' }}>
+                        <path d="M17.5 7.3l1.8-3.1c.1-.2 0-.5-.2-.6-.2-.1-.5 0-.6.2L16.6 7c-1.4-.6-2.9-.9-4.6-.9-1.6 0-3.2.3-4.6.9L5.5 3.8c-.1-.2-.4-.3-.6-.2-.2.1-.3.4-.2.6l1.8 3.1A9.7 9.7 0 002 15h20c0-3.1-1.4-5.9-4.5-7.7zM7 11.5c-.7 0-1.2-.6-1.2-1.2 0-.7.6-1.2 1.2-1.2.7 0 1.2.6 1.2 1.2 0 .7-.6 1.2-1.2 1.2zm10 0c-.7 0-1.2-.6-1.2-1.2 0-.7.6-1.2 1.2-1.2.7 0 1.2.6 1.2 1.2 0 .7-.6 1.2-1.2 1.2z"/>
+                      </svg>
+                      <div className="absolute inset-0 rounded-[18px] bg-gradient-to-tr from-transparent via-white/10 to-white/40 pointer-events-none" />
+                    </motion.div>
+                  )}
+                  <div className="flex-1">
+                    <div className="flex flex-wrap items-start justify-between gap-y-1">
+                      <div>
+                        <p className="text-sm font-semibold text-[var(--page-text)]">{experience.title}</p>
+                        <p className="mt-1 text-sm text-[var(--page-muted)]">{experience.company}</p>
+                      </div>
+                      <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--page-muted)]">
+                        {experience.period}
+                      </span>
+                    </div>
                     <ul className="mt-4 space-y-3 text-[13.5px] leading-relaxed text-[var(--page-muted)]">
                       {experience.bullets.map((bullet) => (
                         <li key={bullet} className="flex gap-3 items-start">
@@ -1033,10 +1084,7 @@ export default function App() {
                       ))}
                     </ul>
                   </div>
-                  <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--page-muted)]">
-                    {experience.period}
-                  </span>
-                </div>
+                </motion.div>
               ))}
             </div>
           </RevealCard>
