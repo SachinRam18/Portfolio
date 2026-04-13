@@ -36,7 +36,7 @@
   }
 
   #root {
-    @apply min-h-screen w-screen;
+    @apply min-h-screen w-full;
   }
 
   body[data-theme='light'] {
@@ -369,12 +369,8 @@
     --scene-shift-y: 0px;
     --scene-scale: 1;
     transform: translate(var(--scene-x), var(--scene-y)) translateY(var(--scene-shift-y)) scale(var(--scene-scale));
-    touch-action: none;
-    cursor: grab;
-  }
-
-  .macbook-scene.is-dragging {
-    cursor: grabbing;
+    touch-action: pan-y;
+    cursor: default;
   }
 
   .screen-wallpaper {
@@ -519,5 +515,36 @@
     .macbook-scene {
       transform: translate(var(--scene-x), var(--scene-y)) translateY(var(--scene-shift-y)) scale(var(--scene-scale));
     }
+  }
+}
+
+@media (max-width: 640px) {
+  .theme-toggle {
+    right: 12px;
+    top: 12px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .hero-chip {
+    padding: 0.35rem 0.65rem;
+    font-size: 11px;
+  }
+
+  .pill-button {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .glass-panel,
+  .mini-stat,
+  .timeline-card,
+  .skill-group-card,
+  .stack-card {
+    border-radius: 28px;
+  }
+
+  .contact-link-strong {
+    min-height: 76px;
   }
 }

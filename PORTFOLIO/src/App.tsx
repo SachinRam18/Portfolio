@@ -491,12 +491,9 @@ function ExperiencePhoneMockup({
 export default function App() {
   const [apps, setApps] = useState<AppState[]>(INITIAL_APPS);
   const [maxZIndex, setMaxZIndex] = useState(12);
-  const [sceneOffset, setSceneOffset] = useState({ x: 0, y: 0 });
-  const [isDraggingLaptop, setIsDraggingLaptop] = useState(false);
   const [theme, setTheme] = useState<ThemeMode>('light');
   const [heroProgress, setHeroProgress] = useState(0);
   const [activeSection, setActiveSection] = useState<(typeof dashboardItems)[number]['id']>('about');
-  const dragStartRef = useRef<{ x: number; y: number; originX: number; originY: number } | null>(null);
   const heroRef = useRef<HTMLElement | null>(null);
   const maxZIndexRef = useRef(12);
 
@@ -515,6 +512,14 @@ export default function App() {
     document.documentElement.dataset.theme = theme;
     document.body.dataset.theme = theme;
     window.localStorage.setItem('portfolio-theme', theme);
+  }, [theme]);
+
+  useEffect(() => {
+    const favicon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+
+    if (favicon) {
+      favicon.href = theme === 'dark' ? '/logo3.png' : '/logo4.png';
+    }
   }, [theme]);
 
   useEffect(() => {
@@ -597,44 +602,8 @@ export default function App() {
   }, [bringAppToFront]);
 
   const activeApp = apps.find((app) => app.isOpen && !app.isMinimized && app.zIndex === maxZIndex);
-  const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
   const sceneScale = 1 - heroProgress * 0.08;
   const sceneShiftY = -heroProgress * 52;
-
-  const onLaptopPointerDown = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
-    if (event.button !== 0) return;
-    if ((event.target as HTMLElement).closest('.screen-wallpaper')) return;
-
-    event.currentTarget.setPointerCapture(event.pointerId);
-    dragStartRef.current = {
-      x: event.clientX,
-      y: event.clientY,
-      originX: sceneOffset.x,
-      originY: sceneOffset.y,
-    };
-    setIsDraggingLaptop(true);
-  }, [sceneOffset.x, sceneOffset.y]);
-
-  const onLaptopPointerMove = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragStartRef.current) return;
-
-    const nextX = dragStartRef.current.originX + (event.clientX - dragStartRef.current.x);
-    const nextY = dragStartRef.current.originY + (event.clientY - dragStartRef.current.y);
-
-    setSceneOffset({
-      x: clamp(nextX, -120, 120),
-      y: clamp(nextY, -90, 90),
-    });
-  }, []);
-
-  const onLaptopPointerUp = useCallback(() => {
-    dragStartRef.current = null;
-    setIsDraggingLaptop(false);
-  }, []);
-
-  const onLaptopDoubleClick = useCallback(() => {
-    setSceneOffset({ x: 0, y: 0 });
-  }, []);
 
   return (
     <div className="portfolio-page relative min-h-screen w-full overflow-x-hidden" data-theme={theme}>
@@ -699,22 +668,15 @@ export default function App() {
           </motion.div>
 
           <div
-            className={`macbook-scene relative mx-auto w-full max-w-[1100px] select-none h-[300px] sm:h-[450px] md:h-[700px] lg:h-[850px] flex justify-center ${isDraggingLaptop ? 'is-dragging' : ''}`}
+            className="macbook-scene relative mx-auto flex h-[260px] w-full max-w-[1100px] select-none justify-center sm:h-[420px] md:h-[680px] lg:h-[820px]"
             style={
               {
-                '--scene-x': `${sceneOffset.x}px`,
-                '--scene-y': `${sceneOffset.y}px`,
                 '--scene-shift-y': `${sceneShiftY}px`,
                 '--scene-scale': sceneScale,
               } as React.CSSProperties
             }
-            onPointerDown={onLaptopPointerDown}
-            onPointerMove={onLaptopPointerMove}
-            onPointerUp={onLaptopPointerUp}
-            onPointerCancel={onLaptopPointerUp}
-            onDoubleClick={onLaptopDoubleClick}
           >
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 flex select-none items-start justify-center pt-4 md:pt-14 scale-[0.35] sm:scale-[0.48] md:scale-[0.80] lg:scale-[0.95] origin-top pointer-events-auto transition-transform duration-300 w-[1020px]">
+            <div className="absolute top-0 left-1/2 z-10 flex w-[940px] -translate-x-1/2 select-none items-start justify-center pt-2 pointer-events-auto origin-top scale-[0.28] transition-transform duration-300 sm:w-[980px] sm:pt-6 sm:scale-[0.42] md:pt-10 md:scale-[0.72] lg:pt-14 lg:w-[1020px] lg:scale-[0.95]">
               <DeviceFrameset device="MacBook Pro" color="silver">
                 <style>{`
                   .marvel-device.macbook .screen { background: transparent !important; border-radius: 12px; }

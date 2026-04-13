@@ -19,6 +19,7 @@ interface DashboardProps {
 
 export default function Dashboard({ items, activeSection, theme, onToggleTheme }: DashboardProps) {
   if (typeof document === 'undefined') return null;
+  const logoSrc = theme === 'dark' ? '/logo3.png' : '/logo4.png';
 
   return createPortal(
     <div
@@ -74,7 +75,7 @@ export default function Dashboard({ items, activeSection, theme, onToggleTheme }
         </button>
 
         <span className="ml-1 hidden items-center gap-2 rounded-full border border-[var(--page-border)] bg-[var(--page-chip)] pl-1.5 pr-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--page-text)] sm:inline-flex">
-          <img src="/logo2.png" alt="Logo" className="w-5 h-5 rounded-full object-contain" />
+          <img src={logoSrc} alt="Logo" className="w-7 h-7 rounded-full object-contain" />
           Sachin Ram
         </span>
       </nav>
