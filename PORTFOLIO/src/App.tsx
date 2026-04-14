@@ -688,13 +688,13 @@ export default function App() {
             </p>
 
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <a className="pill-button" href="#projects">
+              <a className="pill-button" href="#projects" onClick={(e) => { e.preventDefault(); document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); }}>
                 <FolderCode size={14} /> Projects
               </a>
-              <a className="pill-button" href="#about">
+              <a className="pill-button" href="#about" onClick={(e) => { e.preventDefault(); document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); }}>
                 <User size={14} /> About
               </a>
-              <a className="pill-button" href="#contact">
+              <a className="pill-button" href="#contact" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}>
                 <Mail size={14} /> Contact
               </a>
             </div>

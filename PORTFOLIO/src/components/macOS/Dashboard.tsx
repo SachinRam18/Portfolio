@@ -112,6 +112,10 @@ export default function Dashboard({ items, activeSection, theme, onToggleTheme }
             <a
               key={item.id}
               href={`#${item.id}`}
+              onClick={(e) => { 
+                e.preventDefault(); 
+                document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' }); 
+              }}
               aria-current={isActive ? 'page' : undefined}
               className={`group/dash relative flex items-center justify-center rounded-full p-2.5 transition-all duration-[400ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-1.5 hover:scale-[1.12] sm:p-3 ${
                 isActive
