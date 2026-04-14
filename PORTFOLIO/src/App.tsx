@@ -660,7 +660,7 @@ export default function App() {
 
       <section ref={heroRef} className="relative min-h-[90svh] overflow-hidden px-4 pb-12 pt-6 md:px-8 md:pt-8 md:min-h-[128svh]">
         <div className="hero-backdrop pointer-events-none absolute inset-0" />
-        <div className="pointer-events-none absolute inset-0 opacity-100">
+        <div className="pointer-events-none absolute inset-0 opacity-100 z-0">
           <motion.div
             animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}

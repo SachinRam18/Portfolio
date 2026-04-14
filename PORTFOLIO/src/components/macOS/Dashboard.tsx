@@ -97,9 +97,12 @@ export default function Dashboard({ items, activeSection, theme, onToggleTheme }
       `}</style>
 
       {/* Outer wrapper for drop-shadow and glow */}
-      <div className="dashboard-container relative pointer-events-auto rounded-[44px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(255,255,255,0.05)] ring-1 ring-black/5 dark:ring-white/10 overflow-hidden transition-all duration-500">
+      <div 
+        className="dashboard-container relative pointer-events-auto rounded-[44px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(255,255,255,0.05)] ring-1 ring-black/5 dark:ring-white/10 overflow-hidden transition-all duration-500"
+        style={{ WebkitMaskImage: '-webkit-radial-gradient(white, black)' }} // Fix for iOS Safari sharp edges bleeding
+      >
         {/* The glass surface */}
-        <div className="absolute inset-0 z-0 bg-white/20 dark:bg-white/10 backdrop-blur-md" />
+        <div className="absolute inset-0 z-0 bg-white/40 dark:bg-black/30 backdrop-blur-xl" />
         
         {/* Inner glow effect for premium feel - animated white line */}
         <div className="absolute inset-0 z-0 rounded-[44px] shadow-[inset_0_1px_0px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_0px_rgba(255,255,255,0.1)] pointer-events-none" />

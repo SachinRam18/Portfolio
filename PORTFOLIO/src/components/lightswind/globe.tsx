@@ -55,13 +55,13 @@ const Globe: React.FC<GlobeProps> = ({
   className,
   theta = 0.25,
   dark = 0,
-  scale = 1.1,
-  diffuse = 1.2,
-  mapSamples = 60000,
-  mapBrightness = 10,
-  baseColor = "#ffffff",
+  scale = 1,
+  diffuse = 3,
+  mapSamples = 15000,
+  mapBrightness = 6,
+  baseColor = "#a0a0a0",
   markerColor = "#ffffff",
-  glowColor = "#ffffff",
+  glowColor = "#111111",
   markers = [],
   arcs = [],
   arcWidth = 0.5,
@@ -74,10 +74,7 @@ const Globe: React.FC<GlobeProps> = ({
   // Refs for interactive rotation and dragging state
   const phiRef = useRef(0);
   const thetaRef = useRef(theta); // Initialize thetaRef with prop theta
-  const isDragging = useRef(false);
-  const lastMouseX = useRef(0);
-  const lastMouseY = useRef(0);
-  const autoRotateSpeed = 0.003; // Define auto-rotation speed
+  const autoRotateSpeed = 0.01; // Define auto-rotation speed (particle balls usually spin faster)
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -240,70 +237,20 @@ const Globe: React.FC<GlobeProps> = ({
   return (
     <div
       className={cn(
-        "flex items-center justify-center z-[10] mx-auto relative",
+        "flex flex-col items-center justify-center relative w-full h-full",
         className
       )}
-      style={{
-        width: "auto",
-        height: "auto",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        overflow: "hidden",
-      }}
     >
-      {/* Animated cursor line effect */}
-      <style>{`
-        @keyframes cursorGlow {
-          0% {
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 
-                        0 0 40px rgba(255, 255, 255, 0.4),
-                        inset 0 0 20px rgba(255, 255, 255, 0.2);
-          }
-          50% {
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.6), 
-                        0 0 60px rgba(255, 255, 255, 0.3),
-                        inset 0 0 20px rgba(255, 255, 255, 0.1);
-          }
-          100% {
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 
-                        0 0 40px rgba(255, 255, 255, 0.4),
-                        inset 0 0 20px rgba(255, 255, 255, 0.2);
-          }
-        }
-        
-        @keyframes lineTrace {
-          0% {
-            opacity: 0;
-            stroke-dashoffset: 1000;
-          }
-          20% {
-            opacity: 1;
-          }
-          80% {
-            opacity: 1;
-          }
-          100% {
-            opacity: 0;
-            stroke-dashoffset: 0;
-          }
-        }
-      `}</style>
-      
       <canvas
         ref={canvasRef}
         style={{
-          width: "20rem",
-          height: "20rem",
-          maxWidth: "auto",
-          maxHeight: "auto",
+          width: "100%",
+          height: "100%",
+          maxWidth: "100%",
+          maxHeight: "100%",
           aspectRatio: "1",
           display: "block",
           cursor: "grab",
-          borderRadius: "50%",
-          boxShadow: "0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 30px rgba(100, 200, 255, 0.1)",
-          animation: "cursorGlow 3s ease-in-out infinite",
-          transition: "box-shadow 0.3s ease-out",
         }}
       />
     </div>

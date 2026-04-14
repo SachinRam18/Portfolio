@@ -41,9 +41,12 @@ export default function Window({
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.94, opacity: 0, y: 14 }}
           transition={{ type: 'spring', damping: 28, stiffness: 260 }}
-          style={{ zIndex: isMaximized ? 200 : zIndex }}
+          style={{ 
+            zIndex: isMaximized ? 200 : zIndex, 
+            WebkitMaskImage: '-webkit-radial-gradient(white, black)' // Fix for iOS Safari sharp edges bleeding
+          }}
           onMouseDown={onFocus}
-          className={`absolute overflow-hidden shadow-[0_24px_50px_rgba(0,0,0,0.32)] backdrop-blur-xl ${isDark ? 'border-white/10 bg-[#11131a]/90 text-white' : 'border-black/10 bg-[#f6f6f7]/88 text-black'} ${active ? '' : 'opacity-96 saturate-[0.9]'} ${isMaximized ? 'top-7 left-0 !w-full !h-[calc(100%-28px)] rounded-none border-0' : `rounded-[20px] border ${className}`}`}
+          className={`absolute overflow-hidden shadow-[0_24px_50px_rgba(0,0,0,0.32)] ${isDark ? 'border-white/10 bg-[#11131a] text-white' : 'border-black/10 bg-[#f6f6f7] text-black'} ${active ? '' : 'opacity-96 saturate-[0.9]'} ${isMaximized ? 'top-7 left-0 !w-full !h-[calc(100%-28px)] rounded-none border-0' : `rounded-[20px] border ${className}`}`}
         >
           <div className={`border-b ${isDark ? 'border-white/8 bg-white/4' : 'border-black/7 bg-[#f6f6f7]/78'}`}>
             <div className="flex h-7 items-center justify-between px-4 pt-2">
