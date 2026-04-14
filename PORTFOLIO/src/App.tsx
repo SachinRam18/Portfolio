@@ -305,6 +305,17 @@ function ExperiencePhoneMockup({
   return (
           <div className="relative w-full h-[550px] sm:h-[650px] md:h-[750px] lg:h-[900px] flex justify-center mt-8">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 scale-[0.60] sm:scale-[0.75] md:scale-[0.80] lg:scale-[0.90] origin-top drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-transform duration-300">
+              
+              {/* POWER BUTTON - Attached to the device frame wrapper */}
+              <div 
+                className="absolute -right-[4px] top-[140px] w-[5px] h-[54px] z-[500] cursor-pointer transition-colors duration-300 group rounded-r-md overflow-hidden drop-shadow-md"
+                onClick={() => setToggles(prev => ({ ...prev, powerOff: !prev.powerOff }))}
+              >
+                <div className={`w-full h-full bg-gradient-to-r opacity-90 group-hover:opacity-100 transition-all ${
+                  toggles.powerOff ? 'from-red-600 to-red-500 shadow-[0_0_12px_#ef4444]' : 'from-emerald-700 to-emerald-400 shadow-[0_0_12px_#10b981]'
+                }`} />
+              </div>
+
               <DeviceFrameset device="Galaxy Note 8" color="black">
         <div className="relative w-full h-full bg-cover bg-center overflow-hidden font-sans select-none transition-all duration-500" 
              style={{ 
@@ -316,16 +327,6 @@ function ExperiencePhoneMockup({
                fontFamily: '"Roboto", -apple-system, sans-serif' 
              }}>
           
-          {/* POWER BUTTON - Toggles Phone Screen */}
-          <div 
-            className="absolute -right-[14px] top-[140px] w-[4px] h-[48px] cursor-pointer z-50 transition-colors duration-300 group rounded-l-md overflow-hidden"
-            onClick={() => setToggles(prev => ({ ...prev, powerOff: !prev.powerOff }))}
-          >
-            <div className={`w-full h-full bg-gradient-to-l opacity-80 group-hover:opacity-100 transition-all ${
-              toggles.powerOff ? 'from-red-500 to-red-600 shadow-[0_0_8px_#ef4444]' : 'from-green-500 to-emerald-600 shadow-[0_0_8px_#10b981]'
-            }`} />
-          </div>
-
           {/* Screen Off Overlay */}
           <div className={`absolute inset-0 bg-black z-[100] transition-opacity duration-300 pointer-events-none ${toggles.powerOff ? 'opacity-100' : 'opacity-0'}`} />
 
