@@ -55,6 +55,19 @@ import Projects from './components/apps/Projects';
 import Resume from './components/apps/Resume';
 import GlassCursor from './components/macOS/GlassCursor';
 
+const FlutterLogomark = ({ size = 24, className = '', strokeWidth, color }: { size?: number | string, className?: string, strokeWidth?: number | string, color?: string }) => (
+  <div 
+    className={`bg-white rounded-full flex items-center justify-center shadow-sm ${className}`}
+    style={{ width: size, height: size, minWidth: size, minHeight: size }}
+  >
+    <img 
+      src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg" 
+      style={{ width: '55%', height: '55%' }}
+      alt="Flutter" 
+    />
+  </div>
+);
+
 type ThemeMode = 'light' | 'dark';
 
 type HeroStat = {
@@ -73,7 +86,7 @@ type ContactPreview = {
 
 type SkillGroup = {
   title: string;
-  items: { name: string; icon: LucideIcon; level: number; color?: string }[];
+  items: { name: string; icon: string; level: number; color?: string }[];
 };
 
 type ProjectCard = {
@@ -123,12 +136,40 @@ const aboutContacts: ContactPreview[] = [
 ];
 
 const skillGroups: SkillGroup[] = [
-  { title: 'Languages', items: [{ name: 'Python', icon: Terminal, level: 90, color: '#3776AB' }, { name: 'Java', icon: Coffee, level: 85, color: '#5382A1' }, { name: 'C', icon: Cpu, level: 75, color: '#A8B9CC' }, { name: 'Dart', icon: Smartphone, level: 80, color: '#0175C2' }] },
-  { title: 'Frontend', items: [{ name: 'HTML', icon: LayoutTemplate, level: 95, color: '#E34F26' }, { name: 'CSS', icon: Paintbrush, level: 90, color: '#1572B6' }, { name: 'JavaScript', icon: Braces, level: 85, color: '#F7DF1E' }, { name: 'Flutter', icon: Layers, level: 85, color: '#02569B' }, { name: 'React', icon: Atom, level: 80, color: '#61DAFB' }] },
-  { title: 'Backend', items: [{ name: 'Django', icon: ServerCog, level: 85, color: '#092E20' }, { name: 'Flask', icon: Container, level: 80, color: '#808080' }] },
-  { title: 'Databases', items: [{ name: 'MySQL', icon: Database, level: 85, color: '#4479A1' }, { name: 'MongoDB', icon: FolderTree, level: 75, color: '#47A248' }] },
-  { title: 'Tools', items: [{ name: 'Git', icon: GitBranch, level: 90, color: '#F05032' }, { name: 'GitHub', icon: Github, level: 95, color: '#181717' }, { name: 'Firebase', icon: Flame, level: 80, color: '#FFCA28' }, { name: 'REST APIs', icon: Network, level: 85, color: '#0096D6' }, { name: 'VS Code', icon: FileCode, level: 95, color: '#007ACC' }] },
-  { title: 'Core', items: [{ name: 'DSA', icon: Workflow, level: 85, color: '#FF8C00' }, { name: 'OOP', icon: Box, level: 90, color: '#8B0000' }, { name: 'DBMS', icon: HardDrive, level: 80, color: '#4169E1' }, { name: 'OS', icon: Laptop, level: 80, color: '#2F4F4F' }] },
+  { title: 'Languages', items: [
+    { name: 'Python', icon: 'python/python-original.svg', level: 90, color: '#3776AB' },
+    { name: 'Java', icon: 'java/java-original.svg', level: 85, color: '#5382A1' },
+    { name: 'C', icon: 'c/c-original.svg', level: 75, color: '#A8B9CC' },
+    { name: 'Dart', icon: 'dart/dart-original.svg', level: 80, color: '#0175C2' },
+  ] },
+  { title: 'Frontend', items: [
+    { name: 'HTML', icon: 'html5/html5-original.svg', level: 95, color: '#E34F26' },
+    { name: 'CSS', icon: 'css3/css3-original.svg', level: 90, color: '#1572B6' },
+    { name: 'JavaScript', icon: 'javascript/javascript-original.svg', level: 85, color: '#F7DF1E' },
+    { name: 'Flutter', icon: 'flutter/flutter-original.svg', level: 85, color: '#02569B' },
+    { name: 'React', icon: 'react/react-original.svg', level: 80, color: '#61DAFB' },
+  ] },
+  { title: 'Backend', items: [
+    { name: 'Django', icon: 'django/django-plain.svg', level: 85, color: '#092E20' },
+    { name: 'Flask', icon: 'flask/flask-original.svg', level: 80, color: '#808080' },
+  ] },
+  { title: 'Databases', items: [
+    { name: 'MySQL', icon: 'mysql/mysql-original.svg', level: 85, color: '#4479A1' },
+    { name: 'MongoDB', icon: 'mongodb/mongodb-original.svg', level: 75, color: '#47A248' },
+  ] },
+  { title: 'Tools', items: [
+    { name: 'Git', icon: 'git/git-original.svg', level: 90, color: '#F05032' },
+    { name: 'GitHub', icon: 'github/github-original.svg', level: 95, color: '#181717' },
+    { name: 'Firebase', icon: 'firebase/firebase-plain.svg', level: 80, color: '#FFCA28' },
+    { name: 'REST APIs', icon: 'openapi/openapi-original.svg', level: 85, color: '#0096D6' },
+    { name: 'VS Code', icon: 'vscode/vscode-original.svg', level: 95, color: '#007ACC' },
+  ] },
+  { title: 'Core', items: [
+    { name: 'DSA', icon: 'cplusplus/cplusplus-original.svg', level: 85, color: '#FF8C00' },
+    { name: 'OOP', icon: 'java/java-original.svg', level: 90, color: '#8B0000' },
+    { name: 'DBMS', icon: 'postgresql/postgresql-original.svg', level: 80, color: '#4169E1' },
+    { name: 'OS', icon: 'linux/linux-original.svg', level: 80, color: '#2F4F4F' },
+  ] },
 ];
 
 const projectCards: ProjectCard[] = [
@@ -867,23 +908,29 @@ export default function App() {
             />
 
             <div className="mt-8 space-y-4">
-              <div className="timeline-card">
+              <div className="timeline-card flex items-center gap-4">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-white p-1.5 shadow-sm ring-1 ring-black/5 dark:bg-white/90">
+                  <img src="/psg.png" alt="PSG ITech Logo" className="h-full w-full object-contain" />
+                </div>
                 <div>
                   <p className="font-semibold text-[var(--page-text)]">PSG Institute of Technology and Applied Research</p>
                   <p className="mt-1 text-sm text-[var(--page-muted)]">B.Tech CSBS</p>
                 </div>
-                <div className="text-right">
+                <div className="text-right ml-auto">
                   <p className="font-semibold text-[var(--page-text)]">CGPA 8.59</p>
                   <p className="mt-1 text-xs text-[var(--page-muted)]">2023 - Present</p>
                 </div>
               </div>
 
-              <div className="timeline-card">
+              <div className="timeline-card flex items-center gap-4">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-white p-1.5 shadow-sm ring-1 ring-black/5 dark:bg-white/90">
+                  <img src="/ssm.png" alt="SSM School Logo" className="h-full w-full object-contain" />
+                </div>
                 <div>
                   <p className="font-semibold text-[var(--page-text)]">Srimathi Sundaravalli Memorial School</p>
                   <p className="mt-1 text-sm text-[var(--page-muted)]">XII: 88.2% | X: 91.6%</p>
                 </div>
-                <div className="text-right">
+                <div className="text-right ml-auto">
                   <p className="font-semibold text-[var(--page-text)]">Schooling</p>
                   <p className="mt-1 text-xs text-[var(--page-muted)]">Foundation stage</p>
                 </div>
@@ -912,23 +959,31 @@ export default function App() {
                   {group.title}
                 </div>
                 <div className="mt-4 flex flex-col gap-2.5">
-                  {group.items.map((item) => (
-                    <div key={item.name} className="skill-pill flex items-center justify-between w-full relative group/item" style={{ '--icon-brand': item.color } as React.CSSProperties}>
-                      <div className="flex items-center gap-3">
-                        <item.icon size={15} strokeWidth={2.5} className="text-[var(--page-text)] opacity-80 transition-colors duration-300" />
-                        <span className="font-medium text-[13.5px] tracking-tight transition-colors duration-300">{item.name}</span>
+                  {group.items.map((item) => {
+                    const iconSrc = `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${item.icon}`;
+                    return (
+                      <div key={item.name} className="skill-pill flex items-center justify-between w-full relative group/item" style={{ '--icon-brand': item.color } as React.CSSProperties}>
+                        <div className="flex items-center gap-3">
+                          <div className="bg-white rounded-full flex items-center justify-center shadow-sm" style={{ width: 28, height: 28, minWidth: 28, minHeight: 28 }}>
+                            <img 
+                              src={iconSrc}
+                              alt={item.name}
+                              style={{ width: '60%', height: '60%', objectFit: 'contain' }}
+                            />
+                          </div>
+                          <span className="font-medium text-[13.5px] tracking-tight transition-colors duration-300">{item.name}</span>
+                        </div>
+                        {/* Neon Tube Track */}
+                        <div className="flex-1 max-w-[45%] h-1.5 ml-4 rounded-full bg-white/40 dark:bg-white/10 shadow-[inset_0_1px_3px_rgba(0,0,0,0.1)] ring-1 ring-black/5 dark:ring-white/20 backdrop-blur-sm overflow-hidden relative">
+                          {/* Neon Fill glow */}
+                          <div 
+                            className="absolute left-0 top-0 h-full rounded-full bg-[#00ff14] shadow-[0_0_10px_2px_rgba(0,255,20,0.6)] transition-all duration-1000 ease-out"
+                            style={{ width: `${item.level}%` }}
+                          />
+                        </div>
                       </div>
-                      
-                      {/* Neon Tube Track */}
-                      <div className="flex-1 max-w-[45%] h-1.5 ml-4 rounded-full bg-white/40 dark:bg-white/10 shadow-[inset_0_1px_3px_rgba(0,0,0,0.1)] ring-1 ring-black/5 dark:ring-white/20 backdrop-blur-sm overflow-hidden relative">
-                        {/* Neon Fill glow */}
-                        <div 
-                          className="absolute left-0 top-0 h-full rounded-full bg-[#00ff14] shadow-[0_0_10px_2px_rgba(0,255,20,0.6)] transition-all duration-1000 ease-out"
-                          style={{ width: `${item.level}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </motion.div>
             ))}
@@ -1004,11 +1059,7 @@ export default function App() {
                       transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                       className="relative flex h-14 w-14 lg:h-16 lg:w-16 shrink-0 items-center justify-center rounded-[18px] bg-gradient-to-br from-[#02569B] to-[#54C5F8] shadow-[0_12px_24px_-8px_#02569B,inset_0_2px_4px_rgba(255,255,255,0.4)] border border-white/20 mt-1 perspective-[1000px] transform-view"
                     >
-                      <svg width="60%" height="60%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ filter: 'drop-shadow(0px 4px 6px rgba(0,0,0,0.3))' }}>
-                        <path d="M14.314 0L2.3 12 6.6 16.3l12.014-12H14.314z" fill="#FFF" />
-                        <path d="M14.314 24h4.3L13.1 18.5l-4.4 4.2 5.614 1.3z" fill="#FFF" />
-                        <path d="M8.7 14.2l9.9 9.8h4.3L13.1 14.2z" fill="#FFF" opacity="0.8" />
-                      </svg>
+                      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg" className="w-[60%] h-[60%] object-contain relative z-10" alt="Flutter" style={{ filter: 'brightness(0) invert(1) drop-shadow(0px 4px 6px rgba(0,0,0,0.3))' }} />
                       <div className="absolute inset-0 rounded-[18px] bg-gradient-to-tr from-transparent via-white/10 to-white/40 pointer-events-none" />
                     </motion.div>
                   )}

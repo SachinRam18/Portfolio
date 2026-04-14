@@ -307,15 +307,131 @@
   }
 
   .contact-link {
-    @apply flex items-start gap-3 rounded-[22px] p-4 transition-transform duration-200;
+    @apply flex items-start gap-3 rounded-[22px] p-4 transition-transform duration-200 relative overflow-hidden;
     border: 1px solid var(--page-border);
     background: var(--page-surface);
-    box-shadow: var(--page-shadow);
+    box-shadow: var(--page-shadow), inset 0 2px 3px rgba(255,255,255,0.7), inset 0 -2px 3px rgba(18, 38, 70, 0.05);
     backdrop-filter: blur(20px);
+  }
+
+  .contact-link::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 15%; right: 15%; height: 2px;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 70%);
+  }
+
+  .portfolio-page[data-theme='dark'] .contact-link {
+    box-shadow: var(--page-shadow), inset 0 2px 3px rgba(255,255,255,0.15), inset 0 -2px 3px rgba(0, 0, 0, 0.4);
+  }
+
+  .portfolio-page[data-theme='dark'] .contact-link::before {
+    background: radial-gradient(ellipse at center, rgba(200, 230, 255, 0.4) 0%, rgba(255,255,255,0) 70%);
   }
 
   .contact-link:hover {
     transform: translateY(-2px);
+  }
+
+  .dashboard-container {
+    @apply relative overflow-hidden;
+    border: 1px solid var(--page-border);
+    background: var(--page-surface);
+    box-shadow: var(--page-shadow), inset 0 2px 3px rgba(255,255,255,0.72), inset 0 -2px 3px rgba(18, 38, 70, 0.05);
+    backdrop-filter: blur(20px);
+  }
+
+  .dashboard-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 15%;
+    right: 15%;
+    height: 8px;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.45) 38%, rgba(255,255,255,0) 74%);
+    z-index: 1;
+    pointer-events: none;
+    filter: blur(2px);
+    opacity: 0.95;
+  }
+
+  .dashboard-container::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 22%;
+    right: 22%;
+    height: 28px;
+    background: radial-gradient(ellipse at center, rgba(96, 165, 250, 0.42) 0%, rgba(96, 165, 250, 0.18) 30%, rgba(96, 165, 250, 0) 72%);
+    filter: blur(10px);
+    opacity: 0.95;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .dashboard-bubble {
+    background: radial-gradient(ellipse at center, rgba(96, 165, 250, 0.65) 0%, rgba(96, 165, 250, 0.34) 34%, rgba(96, 165, 250, 0) 72%);
+    filter: blur(14px);
+    opacity: 0.95;
+  }
+
+  .portfolio-page[data-theme='dark'] .dashboard-bubble {
+    background: radial-gradient(ellipse at center, rgba(125, 211, 252, 0.8) 0%, rgba(96, 165, 250, 0.4) 34%, rgba(96, 165, 250, 0) 72%);
+  }
+
+  .portfolio-page[data-theme='dark'] .dashboard-container {
+    box-shadow: var(--page-shadow), inset 0 2px 3px rgba(255,255,255,0.15), inset 0 -2px 3px rgba(0, 0, 0, 0.4);
+  }
+
+  .portfolio-page[data-theme='dark'] .dashboard-container::before {
+    background: radial-gradient(ellipse at center, rgba(200, 230, 255, 0.95) 0%, rgba(200, 230, 255, 0.45) 38%, rgba(255,255,255,0) 74%);
+  }
+
+  .portfolio-page[data-theme='dark'] .dashboard-container::after {
+    background: radial-gradient(ellipse at center, rgba(96, 165, 250, 0.62) 0%, rgba(96, 165, 250, 0.28) 28%, rgba(96, 165, 250, 0) 74%);
+  }
+
+  .glass-panel::before,
+  .mini-stat::before,
+  .timeline-card::before,
+  .skill-group-card::before,
+  .stack-card::before,
+  .project-card::before,
+  .contact-link::before,
+  .dashboard-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 1;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.28) 12%, rgba(255, 255, 255, 0) 34%),
+      radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.28) 12%, rgba(255, 255, 255, 0) 34%),
+      radial-gradient(circle at 0% 100%, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.2) 12%, rgba(255, 255, 255, 0) 34%),
+      radial-gradient(circle at 100% 100%, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.2) 12%, rgba(255, 255, 255, 0) 34%);
+    background-repeat: no-repeat;
+    background-size: 38% 38%;
+    background-position: top left, top right, bottom left, bottom right;
+    filter: blur(8px);
+    opacity: 0.78;
+    mix-blend-mode: screen;
+  }
+
+  .portfolio-page[data-theme='dark'] .glass-panel::before,
+  .portfolio-page[data-theme='dark'] .mini-stat::before,
+  .portfolio-page[data-theme='dark'] .timeline-card::before,
+  .portfolio-page[data-theme='dark'] .skill-group-card::before,
+  .portfolio-page[data-theme='dark'] .stack-card::before,
+  .portfolio-page[data-theme='dark'] .project-card::before,
+  .portfolio-page[data-theme='dark'] .contact-link::before,
+  .portfolio-page[data-theme='dark'] .dashboard-container::before {
+    background:
+      radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.34) 12%, rgba(255, 255, 255, 0) 34%),
+      radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.34) 12%, rgba(255, 255, 255, 0) 34%),
+      radial-gradient(circle at 0% 100%, rgba(255, 255, 255, 0.56) 0%, rgba(255, 255, 255, 0.24) 12%, rgba(255, 255, 255, 0) 34%),
+      radial-gradient(circle at 100% 100%, rgba(255, 255, 255, 0.56) 0%, rgba(255, 255, 255, 0.24) 12%, rgba(255, 255, 255, 0) 34%);
+    opacity: 0.92;
   }
 
   .contact-link strong,

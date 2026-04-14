@@ -1,13 +1,36 @@
 "use client";
+import React, { useEffect, useRef } from "react";
+import createGlobe from "cobe";
+import { cn } from "../../lib/utils"; // Assuming cn utility is available for Tailwind classes
 
-import React, { useMemo, useState } from "react";
-import { cn } from "../../lib/utils";
+// Utility function to convert a hex color string to a normalized RGB array
+// Handles #RGB and #RRGGBB formats.
+const hexToRgbNormalized = (hex: string): [number, number, number] => {
+  let r = 0,
+    g = 0,
+    b = 0;
 
-type GlobeDot = {
-  x: number;
-  y: number;
-  radius: number;
-  depth: number;
+  // Remove the # if present
+  const cleanHex = hex.startsWith("#") ? hex.slice(1) : hex;
+
+  if (cleanHex.length === 3) {
+    // Handle shorthand hex codes (e.g., #00F -> #0000FF)
+    r = parseInt(cleanHex[0] + cleanHex[0], 16);
+    g = parseInt(cleanHex[1] + cleanHex[1], 16);
+    b = parseInt(cleanHex[2] + cleanHex[2], 16);
+  } else if (cleanHex.length === 6) {
+    // Handle full hex codes (e.g., #RRGGBB)
+    r = parseInt(cleanHex.substring(0, 2), 16);
+    g = parseInt(cleanHex.substring(2, 4), 16);
+    b = parseInt(cleanHex.substring(4, 6), 16);
+  } else {
+    // Fallback for invalid hex (or if you want to throw an error)
+    console.warn(`Invalid hex color: ${hex}. Falling back to black.`);
+    return [0, 0, 0];
+  }
+
+  // Normalize to 0-1 range
+  return [r / 255, g / 255, b / 255];
 };
 
 interface GlobeProps {
@@ -18,184 +41,256 @@ interface GlobeProps {
   diffuse?: number;
   mapSamples?: number;
   mapBrightness?: number;
+  // Allow color props to be either a hex string or an RGB array
   baseColor?: [number, number, number] | string;
   markerColor?: [number, number, number] | string;
   glowColor?: [number, number, number] | string;
-  hoverMarkerColor?: [number, number, number] | string;
 }
-
-const DOT_COLOR = "#050505";
-const HOVER_COLOR = "#39ff14";
-
-const toColorString = (value: [number, number, number] | string | undefined, fallback: string) => {
-  if (!value) return fallback;
-  if (typeof value === "string") return value;
-  const [red, green, blue] = value;
-  return `rgb(${Math.round(red * 255)}, ${Math.round(green * 255)}, ${Math.round(blue * 255)})`;
-};
-
-const generateDots = (count: number): GlobeDot[] => {
-  const dots: GlobeDot[] = [];
-  const goldenAngle = Math.PI * (3 - Math.sqrt(5));
-
-  for (let index = 0; index < count; index += 1) {
-    const progress = index / Math.max(count - 1, 1);
-    const y = 1 - progress * 2;
-    const radius = Math.sqrt(Math.max(0, 1 - y * y));
-    const angle = goldenAngle * index;
-    const x = Math.cos(angle) * radius;
-    const z = Math.sin(angle) * radius;
-
-    dots.push({
-      x,
-      y,
-      radius: 0.55 + (index % 5) * 0.06,
-      depth: (z + 1) / 2,
-    });
-  }
-
-  return dots;
-};
-
-const rotatePoint = (x: number, y: number, z: number, angle: number) => {
-  const cos = Math.cos(angle);
-  const sin = Math.sin(angle);
-  return {
-    x: x * cos + z * sin,
-    y,
-    z: -x * sin + z * cos,
-  };
-};
 
 const Globe: React.FC<GlobeProps> = ({
   className,
   theta = 0.25,
   dark = 0,
-  markerColor = DOT_COLOR,
-  hoverMarkerColor = HOVER_COLOR,
+  scale = 1.1,
+  diffuse = 1.2,
+  mapSamples = 60000,
+  mapBrightness = 10,
+  baseColor = "#ffffff", // Removed default here, handled in useEffect
+  markerColor = "#ffffff", // Removed default here
+  glowColor = "#ffffff", // Removed default here
+  
 }) => {
-  const [maskPos, setMaskPos] = useState<{ x: number; y: number } | null>(null);
-  const dots = useMemo(() => generateDots(2600), []);
-  const resolvedMarkerColor = toColorString(markerColor, DOT_COLOR);
-  const resolvedHoverColor = toColorString(hoverMarkerColor, HOVER_COLOR);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const globeRef = useRef<any>(null); // To store the cobe globe instance
 
-  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    setMaskPos({
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top,
-    });
-  };
+  // Refs for interactive rotation and dragging state
+  const phiRef = useRef(0);
+  const thetaRef = useRef(theta); // Initialize thetaRef with prop theta
+  const isDragging = useRef(false);
+  const lastMouseX = useRef(0);
+  const lastMouseY = useRef(0);
+  const autoRotateSpeed = 0.003; // Define auto-rotation speed
 
-  const handlePointerLeave = () => {
-    setMaskPos(null);
-  };
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Resolve color props to the [R, G, B] format required by cobe
+    const resolvedBaseColor: [number, number, number] =
+      typeof baseColor === "string"
+        ? hexToRgbNormalized(baseColor)
+        : baseColor || [0.4, 0.6509, 1]; // Default if not provided or invalid hex
+
+    const resolvedMarkerColor: [number, number, number] =
+      typeof markerColor === "string"
+        ? hexToRgbNormalized(markerColor)
+        : markerColor || [1, 0, 0]; // Default if not provided or invalid hex
+
+    const resolvedGlowColor: [number, number, number] =
+      typeof glowColor === "string"
+        ? hexToRgbNormalized(glowColor)
+        : glowColor || [0.2745, 0.5765, 0.898]; // Default if not provided or invalid hex
+
+    const initGlobe = () => {
+      // Destroy existing globe instance if it exists to prevent multiple instances
+      if (globeRef.current) {
+        globeRef.current.destroy();
+        globeRef.current = null;
+      }
+
+      const rect = canvas.getBoundingClientRect();
+      const size = Math.min(rect.width, rect.height);
+      const devicePixelRatio = window.devicePixelRatio || 1;
+      const internalWidth = size * devicePixelRatio;
+      const internalHeight = size * devicePixelRatio;
+
+      canvas.width = internalWidth;
+      canvas.height = internalHeight;
+
+      globeRef.current = createGlobe(canvas, {
+        devicePixelRatio: devicePixelRatio,
+        width: internalWidth,
+        height: internalHeight,
+        phi: phiRef.current,
+        theta: thetaRef.current, // Use thetaRef for initial and interactive theta
+        dark: dark,
+        scale: scale,
+        diffuse: diffuse,
+        mapSamples: mapSamples,
+        mapBrightness: mapBrightness,
+        baseColor: resolvedBaseColor, // Use converted/resolved colors
+        markerColor: resolvedMarkerColor, // Use converted/resolved colors
+        glowColor: resolvedGlowColor, // Use converted/resolved colors
+        opacity: 1,
+        offset: [0, 0],
+        markers: [
+
+        ],
+        onRender: (state: Record<string, any>) => {
+          if (!isDragging.current) {
+            // Only auto-rotate if not currently dragging
+            phiRef.current += autoRotateSpeed;
+          }
+          state.phi = phiRef.current;
+          state.theta = thetaRef.current; // Ensure cobe uses the updated thetaRef
+        },
+      });
+    };
+
+    // --- Mouse Interaction Handlers ---
+    const onMouseDown = (e: MouseEvent) => {
+      isDragging.current = true;
+      lastMouseX.current = e.clientX;
+      lastMouseY.current = e.clientY;
+      canvas.style.cursor = "grabbing"; // Change cursor to indicate dragging
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (isDragging.current) {
+        const deltaX = e.clientX - lastMouseX.current;
+        const deltaY = e.clientY - lastMouseY.current;
+
+        // Adjust rotation sensitivity as needed
+        const rotationSpeed = 0.005;
+
+        // Update phi (horizontal rotation)
+        phiRef.current += deltaX * rotationSpeed;
+        // Update theta (vertical rotation), clamp to prevent flipping
+        // Clamped between -PI/2 and PI/2 to prevent globe from going upside down
+        thetaRef.current = Math.max(
+          -Math.PI / 2,
+          Math.min(Math.PI / 2, thetaRef.current - deltaY * rotationSpeed)
+        );
+
+        lastMouseX.current = e.clientX;
+        lastMouseY.current = e.clientY;
+      }
+    };
+
+    const onMouseUp = () => {
+      isDragging.current = false;
+      canvas.style.cursor = "grab"; // Change cursor back
+    };
+
+    const onMouseLeave = () => {
+      // If mouse leaves canvas while dragging, stop dragging
+      if (isDragging.current) {
+        isDragging.current = false;
+        canvas.style.cursor = "grab";
+      }
+    };
+    // --- End Mouse Interaction Handlers ---
+
+    initGlobe();
+
+    // Attach event listeners for mouse interaction
+    canvas.addEventListener("mousedown", onMouseDown);
+    canvas.addEventListener("mousemove", onMouseMove);
+    canvas.addEventListener("mouseup", onMouseUp);
+    canvas.addEventListener("mouseleave", onMouseLeave); // Important for when mouse leaves canvas during a drag
+
+    const handleResize = () => {
+      initGlobe();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup function: destroy the globe instance and remove event listeners when component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      // Remove mouse event listeners on cleanup
+      if (canvas) {
+        canvas.removeEventListener("mousedown", onMouseDown);
+        canvas.removeEventListener("mousemove", onMouseMove);
+        canvas.removeEventListener("mouseup", onMouseUp);
+        canvas.removeEventListener("mouseleave", onMouseLeave);
+      }
+      if (globeRef.current) {
+        globeRef.current.destroy();
+        globeRef.current = null;
+      }
+    };
+  }, [
+    theta,
+    dark,
+    scale,
+    diffuse,
+    mapSamples,
+    mapBrightness,
+    baseColor, // Include color props in dependency array so globe re-initializes if they change
+    markerColor,
+    glowColor,
+  ]);
 
   return (
     <div
-      className={cn("relative flex items-center justify-center overflow-hidden", className)}
-      onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
-      style={{ cursor: "grab" }}
+      className={cn(
+        "flex items-center justify-center z-[10] mx-auto relative",
+        className
+      )}
+      style={{
+        width: "auto",
+        height: "auto",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        overflow: "hidden",
+      }}
     >
-      <div
-        className="pointer-events-none absolute inset-0 rounded-full transition-opacity duration-300"
+      {/* Animated cursor line effect */}
+      <style>{`
+        @keyframes cursorGlow {
+          0% {
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 
+                        0 0 40px rgba(255, 255, 255, 0.4),
+                        inset 0 0 20px rgba(255, 255, 255, 0.2);
+          }
+          50% {
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.6), 
+                        0 0 60px rgba(255, 255, 255, 0.3),
+                        inset 0 0 20px rgba(255, 255, 255, 0.1);
+          }
+          100% {
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 
+                        0 0 40px rgba(255, 255, 255, 0.4),
+                        inset 0 0 20px rgba(255, 255, 255, 0.2);
+          }
+        }
+        
+        @keyframes lineTrace {
+          0% {
+            opacity: 0;
+            stroke-dashoffset: 1000;
+          }
+          20% {
+            opacity: 1;
+          }
+          80% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+            stroke-dashoffset: 0;
+          }
+        }
+      `}</style>
+      
+      <canvas
+        ref={canvasRef}
         style={{
-          background:
-            maskPos != null
-              ? `radial-gradient(circle 120px at ${maskPos.x}px ${maskPos.y}px, rgba(57,255,20,0.24) 0%, rgba(57,255,20,0.14) 32%, transparent 72%)`
-              : "radial-gradient(circle at center, rgba(57,255,20,0.1), transparent 60%)",
-          filter: "blur(18px)",
-          opacity: maskPos ? 1 : 0.8,
-          mixBlendMode: "screen",
+          width: "20rem",
+          height: "20rem",
+          maxWidth: "auto",
+          maxHeight: "auto",
+          aspectRatio: "1",
+          display: "block",
+          cursor: "grab",
+          borderRadius: "50%",
+          boxShadow: "0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 30px rgba(100, 200, 255, 0.1)",
+          animation: "cursorGlow 3s ease-in-out infinite",
+          transition: "box-shadow 0.3s ease-out",
         }}
       />
-
-      <svg
-        viewBox="0 0 400 400"
-        className="relative h-full w-full"
-        aria-hidden="true"
-      >
-        <defs>
-          <radialGradient id="globeGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor={dark ? "rgba(57,255,20,0.08)" : "rgba(57,255,20,0.06)"} />
-            <stop offset="60%" stopColor="rgba(0,0,0,0)" />
-            <stop offset="100%" stopColor="rgba(0,0,0,0)" />
-          </radialGradient>
-          <clipPath id="globeClip">
-            <circle cx="200" cy="200" r="182" />
-          </clipPath>
-          <radialGradient id="hoverMask" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="white" stopOpacity="1" />
-            <stop offset="45%" stopColor="white" stopOpacity="0.9" />
-            <stop offset="72%" stopColor="white" stopOpacity="0" />
-          </radialGradient>
-          <mask id="hoverGlowMask">
-            {maskPos ? (
-              <circle cx={maskPos.x} cy={maskPos.y} r="78" fill="url(#hoverMask)" />
-            ) : (
-              <circle cx="200" cy="200" r="0" fill="white" />
-            )}
-          </mask>
-        </defs>
-
-        <circle cx="200" cy="200" r="182" fill="url(#globeGlow)" />
-
-        <g clipPath="url(#globeClip)">
-          <g>
-            {dots
-              .map((dot, index) => {
-                const rotation = dark ? theta * 0.9 : theta;
-                const point = rotatePoint(dot.x, dot.y, dot.depth * 2 - 1, rotation);
-                const perspective = 1.12 - (point.y + 1) * 0.08;
-                const px = 200 + point.x * 165 * perspective;
-                const py = 200 + point.y * 165 * perspective;
-                const visible = point.z > -0.5;
-
-                if (!visible) return null;
-
-                return (
-                  <circle
-                    key={`${index}-${dot.radius}`}
-                    cx={px}
-                    cy={py}
-                    r={dot.radius * (1 + (point.z + 1) * 0.1)}
-                    fill={resolvedMarkerColor}
-                    opacity={0.95 - (1 - point.z) * 0.35}
-                  />
-                );
-              })}
-          </g>
-
-          <g mask="url(#hoverGlowMask)">
-            {dots.map((dot, index) => {
-              const rotation = dark ? theta * 0.9 : theta;
-              const point = rotatePoint(dot.x, dot.y, dot.depth * 2 - 1, rotation);
-              const perspective = 1.12 - (point.y + 1) * 0.08;
-              const px = 200 + point.x * 165 * perspective;
-              const py = 200 + point.y * 165 * perspective;
-              const visible = point.z > -0.5;
-
-              if (!visible) return null;
-
-              return (
-                <circle
-                  key={`hover-${index}-${dot.radius}`}
-                  cx={px}
-                  cy={py}
-                  r={dot.radius * 1.35}
-                  fill={resolvedHoverColor}
-                  opacity={0.95 - (1 - point.z) * 0.28}
-                />
-              );
-            })}
-          </g>
-
-          <circle cx="200" cy="200" r="182" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1.25" />
-        </g>
-
-        <circle cx="200" cy="200" r="182" fill="none" stroke="rgba(57,255,20,0.08)" strokeWidth="24" opacity="0.16" />
-      </svg>
     </div>
   );
 };

@@ -1,5 +1,18 @@
 import React from 'react';
-import { Code2, Database, Globe, Layout, Smartphone, Terminal } from 'lucide-react';
+import { Code2, Database, Globe, Layout, Terminal } from 'lucide-react';
+
+const FlutterLogomark = ({ size = 24, className = '' }: { size?: number | string, className?: string, color?: string }) => (
+  <div 
+    className={`bg-white rounded-full flex items-center justify-center shadow-sm ${className}`}
+    style={{ width: size, height: size, minWidth: size, minHeight: size }}
+  >
+    <img 
+      src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg" 
+      style={{ width: '55%', height: '55%' }}
+      alt="Flutter" 
+    />
+  </div>
+);
 
 type ThemeMode = 'light' | 'dark';
 
@@ -7,7 +20,7 @@ const skills = [
   { name: 'Python', icon: Terminal, color: 'text-sky-600' },
   { name: 'Java', icon: Code2, color: 'text-orange-600' },
   { name: 'React', icon: Layout, color: 'text-cyan-600' },
-  { name: 'Flutter', icon: Smartphone, color: 'text-blue-600' },
+  { name: 'Flutter', icon: FlutterLogomark, color: 'text-blue-600' },
   { name: 'Django', icon: Globe, color: 'text-emerald-600' },
   { name: 'MongoDB', icon: Database, color: 'text-green-600' },
 ];
