@@ -312,7 +312,7 @@ function ExperiencePhoneMockup({
                 onClick={() => setToggles(prev => ({ ...prev, powerOff: !prev.powerOff }))}
               >
                 <div className={`w-full h-full bg-gradient-to-r opacity-90 group-hover:opacity-100 transition-all ${
-                  toggles.powerOff ? 'from-red-600 to-red-500 shadow-[0_0_12px_#ef4444]' : 'from-emerald-700 to-emerald-400 shadow-[0_0_12px_#10b981]'
+                  toggles.powerOff ? 'from-red-600 to-red-500 shadow-[0_0_12px_#ef4444]' : 'from-[#fffb8f] to-[#fffee6] shadow-[0_0_14px_#fffb8f]'
                 }`} />
               </div>
 
