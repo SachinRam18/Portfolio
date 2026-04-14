@@ -289,7 +289,7 @@ function ExperiencePhoneMockup({
   experienceCards: ExperienceCard[];
 }) {
   const [isQsOpen, setIsQsOpen] = React.useState(false);
-  const [toggles, setToggles] = React.useState({ wifi: true, bt: false, airplane: false, dnd: false });
+  const [toggles, setToggles] = React.useState({ wifi: true, bt: false, airplane: false, dnd: false, powerOff: false });
   const [openedApp, setOpenedApp] = React.useState<number | null>(null);
 
   const toggleSetting = (key: keyof typeof toggles) => {
@@ -316,10 +316,23 @@ function ExperiencePhoneMockup({
                fontFamily: '"Roboto", -apple-system, sans-serif' 
              }}>
           
+          {/* POWER BUTTON - Toggles Phone Screen */}
+          <div 
+            className="absolute -right-[14px] top-[140px] w-[4px] h-[48px] cursor-pointer z-50 transition-colors duration-300 group rounded-l-md overflow-hidden"
+            onClick={() => setToggles(prev => ({ ...prev, powerOff: !prev.powerOff }))}
+          >
+            <div className={`w-full h-full bg-gradient-to-l opacity-80 group-hover:opacity-100 transition-all ${
+              toggles.powerOff ? 'from-red-500 to-red-600 shadow-[0_0_8px_#ef4444]' : 'from-green-500 to-emerald-600 shadow-[0_0_8px_#10b981]'
+            }`} />
+          </div>
+
+          {/* Screen Off Overlay */}
+          <div className={`absolute inset-0 bg-black z-[100] transition-opacity duration-300 pointer-events-none ${toggles.powerOff ? 'opacity-100' : 'opacity-0'}`} />
+
           {/* STATUS BAR - Click to open Quick Settings */}
           <div 
             className="absolute top-0 left-0 right-0 h-[32px] flex justify-between items-center px-5 z-40 cursor-pointer hover:bg-black/5 transition-colors"
-            onClick={() => !openedApp && setIsQsOpen(true)}
+            onClick={() => !toggles.powerOff && !openedApp && setIsQsOpen(true)}
           >
             <span className={`text-[12px] font-medium tracking-wide ${isQsOpen || openedApp !== null ? 'text-slate-800' : 'text-slate-800'}`}>3:00</span>
             <div className={`flex gap-1.5 items-center ${isQsOpen || openedApp !== null ? 'text-slate-800' : 'text-slate-800'}`}>
@@ -1171,6 +1184,7 @@ export default function App() {
       <Dashboard 
         items={dashboardItems} 
         activeSection={activeSection} 
+        onSectionClick={(id) => setActiveSection(id as any)}
         theme={theme}
         onToggleTheme={() => {
           const toggle = () => setTheme((current) => (current === 'dark' ? 'light' : 'dark'));

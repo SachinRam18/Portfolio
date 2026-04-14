@@ -13,11 +13,12 @@ type DashboardItem = {
 interface DashboardProps {
   items: readonly DashboardItem[];
   activeSection: string;
+  onSectionClick?: (id: string) => void;
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
 }
 
-export default function Dashboard({ items, activeSection, theme, onToggleTheme }: DashboardProps) {
+export default function Dashboard({ items, activeSection, onSectionClick, theme, onToggleTheme }: DashboardProps) {
   if (typeof document === 'undefined') return null;
   const logoSrc = theme === 'dark' ? '/logo3.png' : '/logo4.png';
 
@@ -117,6 +118,7 @@ export default function Dashboard({ items, activeSection, theme, onToggleTheme }
               href={`#${item.id}`}
               onClick={(e) => { 
                 e.preventDefault(); 
+                onSectionClick?.(item.id);
                 document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' }); 
               }}
               aria-current={isActive ? 'page' : undefined}

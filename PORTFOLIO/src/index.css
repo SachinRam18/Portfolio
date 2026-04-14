@@ -141,6 +141,7 @@
     -webkit-backdrop-filter: blur(48px) saturate(180%);
     position: relative;
     overflow: hidden;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
   }
   .glass-panel::before {
     content: '';
