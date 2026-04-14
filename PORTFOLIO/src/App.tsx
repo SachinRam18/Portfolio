@@ -306,8 +306,15 @@ function ExperiencePhoneMockup({
           <div className="relative w-full h-[550px] sm:h-[650px] md:h-[750px] lg:h-[900px] flex justify-center mt-8">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 scale-[0.60] sm:scale-[0.75] md:scale-[0.80] lg:scale-[0.90] origin-top drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-transform duration-300">
               <DeviceFrameset device="Galaxy Note 8" color="black">
-        <div className="relative w-full h-full bg-cover bg-center overflow-hidden font-sans select-none" 
-             style={{ background: 'linear-gradient(155deg, #cce4f7 0%, #78b8f2 50%, #8498f5 100%)', fontFamily: '"SF Pro Display", -apple-system, sans-serif' }}>
+        <div className="relative w-full h-full bg-cover bg-center overflow-hidden font-sans select-none transition-all duration-500" 
+             style={{ 
+               backgroundImage: theme === 'dark' 
+                 ? `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1080 1920'%3E%3Cdefs%3E%3ClinearGradient id='night' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231a0b2e'/%3E%3Cstop offset='50%25' stop-color='%23311d4e'/%3E%3Cstop offset='100%25' stop-color='%234a306d'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1080' height='1920' fill='url(%23night)'/%3E%3C!-- Stars --%3E%3Ccircle cx='150' cy='200' r='3' fill='%23ffffff'/%3E%3Ccircle cx='450' cy='300' r='4' fill='%23ffffff' opacity='0.8'/%3E%3Ccircle cx='800' cy='150' r='2' fill='%23ffffff' opacity='0.5'/%3E%3Ccircle cx='600' cy='600' r='3' fill='%23ffffff'/%3E%3Ccircle cx='250' cy='800' r='4' fill='%23ffffff' opacity='0.7'/%3E%3Ccircle cx='900' cy='500' r='2' fill='%23ffffff'/%3E%3Ccircle cx='300' cy='400' r='2.5' fill='%23ffffff' opacity='0.4'/%3E%3Ccircle cx='700' cy='800' r='2' fill='%23ffffff' opacity='0.6'/%3E%3Ccircle cx='540' cy='400' r='120' fill='%23f6f1d3'/%3E%3C!-- Moon craters --%3E%3Ccircle cx='490' cy='370' r='15' fill='%23e0dbbd' opacity='0.6'/%3E%3Ccircle cx='570' cy='430' r='25' fill='%23e0dbbd' opacity='0.5'/%3E%3Ccircle cx='610' cy='350' r='12' fill='%23e0dbbd' opacity='0.4'/%3E%3C!-- Dark Clouds --%3E%3Cpath d='M 250 750 A 70 70 0 0 1 350 680 A 100 100 0 0 1 520 730 A 70 70 0 0 1 520 850 L 200 850 A 60 60 0 0 1 250 750' fill='%23384c5f' opacity='0.6'/%3E%3Cpath d='M 700 950 A 80 80 0 0 1 850 880 A 110 110 0 0 1 1050 950 A 70 70 0 0 1 1050 1080 L 650 1080 A 65 65 0 0 1 700 950' fill='%232c4154' opacity='0.5'/%3E%3C/svg%3E")`
+                 : `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1080 1920'%3E%3Cdefs%3E%3ClinearGradient id='sky' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%235ebcff'/%3E%3Cstop offset='100%25' stop-color='%23b7e3ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1080' height='1920' fill='url(%23sky)'/%3E%3C!-- Sun --%3E%3Ccircle cx='540' cy='400' r='140' fill='%23FFD700'/%3E%3Ccircle cx='540' cy='400' r='180' fill='%23FFD700' opacity='0.3'/%3E%3Ccircle cx='540' cy='400' r='230' fill='%23FFD700' opacity='0.15'/%3E%3C!-- Clouds --%3E%3Cpath d='M 250 650 A 60 60 0 0 1 350 600 A 90 90 0 0 1 500 650 A 60 60 0 0 1 500 750 L 220 750 A 50 50 0 0 1 250 650' fill='%23FFFFFF' opacity='0.95'/%3E%3Cpath d='M 700 950 A 80 80 0 0 1 850 880 A 110 110 0 0 1 1050 950 A 70 70 0 0 1 1050 1080 L 650 1080 A 65 65 0 0 1 700 950' fill='%23FFFFFF' opacity='0.9'/%3E%3Cpath d='M 100 1200 A 70 70 0 0 1 220 1120 A 100 100 0 0 1 400 1200 A 70 70 0 0 1 400 1320 L 50 1320 A 60 60 0 0 1 100 1200' fill='%23FFFFFF' opacity='0.85'/%3E%3C/svg%3E")`,
+               backgroundSize: 'cover',
+               backgroundPosition: 'center',
+               fontFamily: '"Roboto", -apple-system, sans-serif' 
+             }}>
           
           {/* STATUS BAR - Click to open Quick Settings */}
           <div 
@@ -717,6 +724,7 @@ export default function App() {
               } as React.CSSProperties
             }
           >
+
             <div className="absolute top-0 left-1/2 z-10 flex w-[940px] -translate-x-1/2 select-none items-start justify-center pt-2 pointer-events-auto origin-top scale-[0.28] transition-transform duration-300 sm:w-[980px] sm:pt-6 sm:scale-[0.42] md:pt-10 md:scale-[0.72] lg:pt-14 lg:w-[1020px] lg:scale-[0.95]">
               <DeviceFrameset device="MacBook Pro" color="silver">
                 <style>{`

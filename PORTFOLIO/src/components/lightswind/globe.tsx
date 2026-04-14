@@ -41,10 +41,14 @@ interface GlobeProps {
   diffuse?: number;
   mapSamples?: number;
   mapBrightness?: number;
-  // Allow color props to be either a hex string or an RGB array
   baseColor?: [number, number, number] | string;
   markerColor?: [number, number, number] | string;
   glowColor?: [number, number, number] | string;
+  markers?: { location: [number, number]; size: number; id?: string; color?: [number, number, number] }[];
+  arcs?: { from: [number, number]; to: [number, number]; color?: [number, number, number] }[];
+  arcWidth?: number;
+  arcHeight?: number;
+  opacity?: number;
 }
 
 const Globe: React.FC<GlobeProps> = ({
@@ -55,10 +59,14 @@ const Globe: React.FC<GlobeProps> = ({
   diffuse = 1.2,
   mapSamples = 60000,
   mapBrightness = 10,
-  baseColor = "#ffffff", // Removed default here, handled in useEffect
-  markerColor = "#ffffff", // Removed default here
-  glowColor = "#ffffff", // Removed default here
-  
+  baseColor = "#ffffff",
+  markerColor = "#ffffff",
+  glowColor = "#ffffff",
+  markers = [],
+  arcs = [],
+  arcWidth = 0.5,
+  arcHeight = 0.3,
+  opacity = 1,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const globeRef = useRef<any>(null); // To store the cobe globe instance
@@ -121,11 +129,14 @@ const Globe: React.FC<GlobeProps> = ({
         baseColor: resolvedBaseColor, // Use converted/resolved colors
         markerColor: resolvedMarkerColor, // Use converted/resolved colors
         glowColor: resolvedGlowColor, // Use converted/resolved colors
-        opacity: 1,
+        opacity: opacity,
         offset: [0, 0],
-        markers: [
-
-        ],
+        markers: markers,
+        arcs: arcs,
+        arcColor: resolvedMarkerColor, // Same as marker color usually, but you can add discrete props later
+        arcWidth: arcWidth,
+        arcHeight: arcHeight,
+        markerElevation: 0.01,
         onRender: (state: Record<string, any>) => {
           if (!isDragging.current) {
             // Only auto-rotate if not currently dragging
@@ -218,8 +229,12 @@ const Globe: React.FC<GlobeProps> = ({
     mapSamples,
     mapBrightness,
     baseColor, // Include color props in dependency array so globe re-initializes if they change
-    markerColor,
-    glowColor,
+  // Include our new array props and opacity here:
+    markers,
+    arcs,
+    arcWidth,
+    arcHeight,
+    opacity,
   ]);
 
   return (
