@@ -733,18 +733,19 @@ export default function App() {
             </div>
           </motion.div>
 
-          <div
-            className="macbook-scene relative mx-auto flex h-[260px] w-full max-w-[1100px] select-none justify-center sm:h-[420px] md:h-[680px] lg:h-[820px]"
-            style={
-              {
-                '--scene-shift-y': `${sceneShiftY}px`,
-                '--scene-scale': sceneScale,
-              } as React.CSSProperties
-            }
-          >
+          <div className="w-full overflow-x-hidden flex justify-center mt-8">
+            <div
+              className="macbook-scene relative mx-auto flex h-[260px] w-full max-w-[1100px] select-none justify-center sm:h-[420px] md:h-[680px] lg:h-[820px]"
+              style={
+                {
+                  '--scene-shift-y': `${sceneShiftY}px`,
+                  '--scene-scale': sceneScale,
+                } as React.CSSProperties
+              }
+            >
 
-            <div className="absolute top-0 left-1/2 z-10 flex w-[940px] -translate-x-1/2 select-none items-start justify-center pt-2 pointer-events-auto origin-top scale-[0.28] transition-transform duration-300 sm:w-[980px] sm:pt-6 sm:scale-[0.42] md:pt-10 md:scale-[0.72] lg:pt-14 lg:w-[1020px] lg:scale-[0.95]">
-              <DeviceFrameset device="MacBook Pro" color="silver">
+              <div className="absolute top-0 left-1/2 z-10 flex w-[940px] -translate-x-1/2 select-none items-start justify-center pt-2 pointer-events-auto origin-top scale-[0.28] transition-transform duration-300 sm:w-[980px] sm:pt-6 sm:scale-[0.42] md:pt-10 md:scale-[0.72] lg:pt-14 lg:w-[1020px] lg:scale-[0.95]">
+                <DeviceFrameset device="MacBook Pro" color="silver">
                 <style>{`
                   .marvel-device.macbook .screen { background: transparent !important; border-radius: 12px; }
                   .marvel-device.macbook { box-shadow: 0 40px 100px -20px rgba(0,0,0,0.5); background: #151820; width: 1020px; height: 640px; padding: 20px 20px 44px; border-radius: 34px; }
@@ -836,6 +837,7 @@ export default function App() {
                 </div>
               </DeviceFrameset>
             </div>
+          </div>
           </div>
 
           <div className={`mx-auto flex w-full max-w-4xl items-center justify-between gap-4 rounded-full border px-5 py-3 text-xs font-medium backdrop-blur-xl ${theme === 'dark' ? 'border-white/10 bg-white/6 text-white/80' : 'border-white/35 bg-white/30 text-slate-700 shadow-[0_18px_35px_rgba(100,120,160,0.12)]'}`}>
