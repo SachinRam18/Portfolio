@@ -93,8 +93,8 @@
     --neon-bg: #00FF14;
     --neon-color: #00FF14;
     --neon-glow: rgba(0, 255, 20, 0.6);
-    --neon-glow-spread: rgba(0, 255, 20, 0.4);
-    --neon-glow-subtle: rgba(0, 255, 20, 0.3);
+    --neon-glow-spread: rgba(0, 255, 20, 0.3);
+    --neon-glow-subtle: rgba(0, 255, 20, 0.08);
   }
 
   body[data-theme='dark'] {
