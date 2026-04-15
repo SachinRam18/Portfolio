@@ -172,9 +172,10 @@ export default function Dashboard({ items, activeSection, onSectionClick, theme,
               {isActive && (
                 <motion.div
                   layoutId="activeDashboardSection"
-                  className="absolute -bottom-2 left-1/2 h-[3px] w-6 -translate-x-1/2 rounded-full bg-[#00FF14]"
+                  className="absolute -bottom-2 left-1/2 h-[3px] w-6 -translate-x-1/2 rounded-full"
                   style={{
-                    boxShadow: '0 0 10px rgba(0, 255, 20, 0.6), 0 0 4px rgba(0, 255, 20, 0.4)'
+                    background: 'var(--neon-bg)',
+                    boxShadow: '0 0 10px var(--neon-glow), 0 0 4px var(--neon-glow-spread)'
                   }}
                   transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                 />

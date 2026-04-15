@@ -70,9 +70,10 @@ export default function GlassCursor() {
       >
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/40 dark:from-white/30 to-transparent" />
         <div
-          className={`rounded-full bg-[#00ff14] shadow-[0_0_8px_rgba(0,255,20,0.8)] transition-all duration-300 ${
+          className={`rounded-full shadow-[0_0_8px_var(--neon-glow)] transition-all duration-300 ${
             isPointer ? 'h-2 w-2 opacity-100' : 'h-1.5 w-1.5 opacity-90'
           }`}
+          style={{ background: 'var(--neon-bg)' }}
         />
       </div>
     </div>,

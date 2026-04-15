@@ -255,14 +255,14 @@ function SectionHeader({ eyebrow, title, description }: { eyebrow: string; title
   );
 }
 
-function RevealCard({ children, className = '', id = '' }: { children: React.ReactNode; className?: string; id?: string }) {
+function RevealCard({ children, className = '', id = '', delay = 0 }: { children: React.ReactNode; className?: string; id?: string; delay?: number }) {
   return (
     <motion.section
       id={id}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.24 }}
-      transition={{ duration: 0.55, ease: 'easeOut' }}
+      initial={{ opacity: 0, y: 40, scale: 0.98 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: false, margin: '-10%' }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay }}
       className={`glass-panel ${className}`}
     >
       {children}
@@ -589,6 +589,8 @@ export default function App() {
   }, [maxZIndex]);
 
   useEffect(() => {
+    let rafId: number;
+
     const updateHeroProgress = () => {
       const hero = heroRef.current;
       if (!hero) return;
@@ -600,42 +602,55 @@ export default function App() {
       setHeroProgress(progress);
     };
 
+    const handleScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(updateHeroProgress);
+    };
+
     updateHeroProgress();
-    window.addEventListener('scroll', updateHeroProgress, { passive: true });
-    window.addEventListener('resize', updateHeroProgress);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
 
     return () => {
-      window.removeEventListener('scroll', updateHeroProgress);
-      window.removeEventListener('resize', updateHeroProgress);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+      cancelAnimationFrame(rafId);
     };
   }, []);
 
   useEffect(() => {
+    let rafId: number;
+
     const handleScroll = () => {
-      const sections = dashboardItems
-        .map((item) => document.getElementById(item.id))
-        .filter((section): section is HTMLElement => section !== null);
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const sections = dashboardItems
+          .map((item) => document.getElementById(item.id))
+          .filter((section): section is HTMLElement => section !== null);
 
-      if (!sections.length) return;
+        if (!sections.length) return;
 
-      const scrollPosition = window.scrollY + window.innerHeight / 2.5;
+        const scrollPosition = window.scrollY + window.innerHeight / 2.5;
 
-      let currentSection = sections[0].id;
-      for (const section of sections) {
-        // offsetTop works if the parent is positioned relatively, but we can do bounding client rect + scrollY
-        const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-        if (sectionTop <= scrollPosition) {
-          currentSection = section.id;
+        let currentSection = sections[0].id;
+        for (const section of sections) {
+          const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+          if (sectionTop <= scrollPosition) {
+            currentSection = section.id;
+          }
         }
-      }
 
-      setActiveSection(currentSection as (typeof dashboardItems)[number]['id']);
+        setActiveSection((prev) => prev !== currentSection ? currentSection as any : prev);
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
   const bringAppToFront = useCallback((id: AppId) => {
@@ -1008,8 +1023,11 @@ export default function App() {
                         <div className="flex-1 max-w-[45%] h-1.5 ml-4 rounded-full bg-white/40 dark:bg-white/10 shadow-[inset_0_1px_3px_rgba(0,0,0,0.1)] ring-1 ring-black/5 dark:ring-white/20 backdrop-blur-sm overflow-hidden relative">
                           {/* Neon Fill glow */}
                           <div 
-                            className="absolute left-0 top-0 h-full rounded-full bg-[#00ff14] shadow-[0_0_10px_2px_rgba(0,255,20,0.6)] transition-all duration-1000 ease-out"
-                            style={{ width: `${item.level}%` }}
+                            className="absolute left-0 top-0 h-full rounded-full shadow-[0_0_10px_2px_var(--neon-glow)] transition-all duration-1000 ease-out"
+                            style={{ 
+                              width: `${item.level}%`,
+                              background: 'var(--neon-bg)' 
+                            }}
                           />
                         </div>
                       </div>
@@ -1029,12 +1047,15 @@ export default function App() {
           />
 
           <div className="mt-8 grid gap-5 lg:grid-cols-2">
-            {projectCards.map((project) => (
+            {projectCards.map((project, index) => (
               <motion.article 
                 key={project.title} 
                 className="project-card will-change-transform"
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: false, margin: '-5%' }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 }}
                 whileHover={{ y: -8, scale: 1.02 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
               >
                 <div className="project-surface relative group/img overflow-hidden">
                   {project.image ? (
@@ -1077,12 +1098,15 @@ export default function App() {
             />
 
             <div className="mt-8 space-y-4">
-              {experienceCards.map((experience) => (
+              {experienceCards.map((experience, index) => (
                 <motion.div 
                   key={experience.title} 
                   className="timeline-card flex items-start gap-4 will-change-transform"
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: false, margin: '-5%' }}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: index * 0.15 }}
                   whileHover={{ y: -8, scale: 1.02 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 >
                   {experience.title.includes('Flutter') && (
                     <motion.div
@@ -1120,8 +1144,8 @@ export default function App() {
                       {experience.bullets.map((bullet) => (
                         <li key={bullet} className="flex gap-3 items-start">
                           <div className="relative mt-[6px] shrink-0 h-2 w-2">
-                            <span className="absolute inset-0 rounded-full bg-[#00ff14] opacity-40 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]" />
-                            <span className="relative block h-2 w-2 rounded-full bg-[#00ff14] shadow-[0_0_10px_2px_rgba(0,255,20,0.5)]" />
+                            <span className="absolute inset-0 rounded-full opacity-40 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]" style={{ background: 'var(--neon-bg)' }} />
+                            <span className="relative block h-2 w-2 rounded-full shadow-[0_0_10px_2px_var(--neon-glow-spread)]" style={{ background: 'var(--neon-bg)' }} />
                           </div>
                           <span>{bullet}</span>
                         </li>

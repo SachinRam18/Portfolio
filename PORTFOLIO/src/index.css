@@ -12,12 +12,12 @@
 
 @keyframes neon-glow-blink {
   0%, 100% {
-    box-shadow: 0 0 5px #00FF14, 0 0 20px #00FF14;
-    border-color: #00FF14;
+    box-shadow: 0 0 5px var(--neon-color), 0 0 20px var(--neon-color);
+    border-color: var(--neon-color);
   }
   50% {
-    box-shadow: 0 0 2px #00FF14, 0 0 5px #00FF14;
-    border-color: rgba(0, 255, 20, 0.3);
+    box-shadow: 0 0 2px var(--neon-color), 0 0 5px var(--neon-color);
+    border-color: var(--neon-glow-subtle);
   }
 }
 
@@ -89,6 +89,12 @@
     --page-border: rgba(255, 255, 255, 0.8);
     --page-shadow: 0 32px 80px rgba(90, 130, 180, 0.08), inset 0 2px 4px rgba(255,255,255,0.8);
     --page-chip: rgba(255, 255, 255, 0.85);
+
+    --neon-bg: #00FF14;
+    --neon-color: #00FF14;
+    --neon-glow: rgba(0, 255, 20, 0.6);
+    --neon-glow-spread: rgba(0, 255, 20, 0.4);
+    --neon-glow-subtle: rgba(0, 255, 20, 0.3);
   }
 
   body[data-theme='dark'] {
@@ -115,9 +121,11 @@
       radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.38), transparent 24%),
       radial-gradient(circle at 80% 16%, rgba(115, 181, 255, 0.16), transparent 22%),
       radial-gradient(circle at 50% 82%, rgba(255, 255, 255, 0.12), transparent 26%),
-      radial-gradient(circle at 75% 25%, rgba(0, 255, 20, 0.08), transparent 28%);
+      radial-gradient(circle at 75% 25%, var(--neon-glow-subtle), transparent 28%);
     opacity: 0.8;
     z-index: 0;
+    will-change: transform;
+    transform: translateZ(0); /* Hardware acceleration */
   }
 
   .portfolio-page[data-theme='dark']::before {
@@ -125,8 +133,10 @@
       radial-gradient(circle at 22% 12%, rgba(99, 163, 255, 0.18), transparent 24%),
       radial-gradient(circle at 78% 18%, rgba(155, 92, 255, 0.12), transparent 22%),
       radial-gradient(circle at 50% 82%, rgba(255, 255, 255, 0.08), transparent 26%),
-      radial-gradient(circle at 75% 25%, rgba(0, 255, 20, 0.12), transparent 28%);
+      radial-gradient(circle at 75% 25%, var(--neon-glow-subtle), transparent 28%);
     opacity: 0.95;
+    will-change: transform;
+    transform: translateZ(0); /* Hardware acceleration */
   }
 
   .hero-backdrop {
@@ -136,6 +146,8 @@
       radial-gradient(circle at 84% 20%, rgba(167, 139, 250, 0.18), transparent 26%),
       radial-gradient(circle at 50% 92%, rgba(255, 255, 255, 0.12), transparent 30%);
     filter: saturate(1.02);
+    will-change: transform;
+    transform: translateZ(0); /* Hardware acceleration */
   }
 
   .portfolio-page[data-theme='dark'] .hero-backdrop {
@@ -144,6 +156,8 @@
       radial-gradient(circle at 16% 18%, rgba(96, 165, 250, 0.2), transparent 24%),
       radial-gradient(circle at 84% 20%, rgba(167, 139, 250, 0.22), transparent 26%),
       radial-gradient(circle at 50% 92%, rgba(255, 255, 255, 0.05), transparent 30%);
+    will-change: transform;
+    transform: translateZ(0); /* Hardware acceleration */
   }
 
   .portfolio-page > * {
