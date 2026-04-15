@@ -5,6 +5,22 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
+@keyframes full-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes neon-glow-blink {
+  0%, 100% {
+    box-shadow: 0 0 5px #00FF14, 0 0 20px #00FF14;
+    border-color: #00FF14;
+  }
+  50% {
+    box-shadow: 0 0 2px #00FF14, 0 0 5px #00FF14;
+    border-color: rgba(0, 255, 20, 0.3);
+  }
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 0.6s;
@@ -65,7 +81,7 @@
     background: radial-gradient(circle at top, rgba(255, 255, 255, 0.55), transparent 24%);
   }
 
-  .portfolio-page {
+  body {
     --page-bg: linear-gradient(180deg, #f3f9ff 0%, #fcfeff 42%, #f1f8ff 100%);
     --page-text: #10203a;
     --page-muted: rgba(16, 32, 58, 0.7);
@@ -73,11 +89,9 @@
     --page-border: rgba(255, 255, 255, 0.8);
     --page-shadow: 0 32px 80px rgba(90, 130, 180, 0.08), inset 0 2px 4px rgba(255,255,255,0.8);
     --page-chip: rgba(255, 255, 255, 0.85);
-    background: var(--page-bg);
-    color: var(--page-text);
   }
 
-  .portfolio-page[data-theme='dark'] {
+  body[data-theme='dark'] {
     --page-bg: linear-gradient(180deg, #05060b 0%, #0d1020 34%, #1a1034 72%, #100c22 100%);
     --page-text: #f4f7fb;
     --page-muted: rgba(244, 247, 251, 0.7);
@@ -85,6 +99,11 @@
     --page-border: rgba(255, 255, 255, 0.1);
     --page-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
     --page-chip: rgba(255, 255, 255, 0.08);
+  }
+
+  .portfolio-page {
+    background: var(--page-bg);
+    color: var(--page-text);
   }
 
   .portfolio-page::before {

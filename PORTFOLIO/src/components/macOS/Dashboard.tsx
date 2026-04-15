@@ -1,5 +1,6 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
+import { motion } from 'motion/react';
 import { SunMedium, MoonStar } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -75,7 +76,7 @@ export default function Dashboard({ items, activeSection, onSectionClick, theme,
           width: 2px;
           height: 24px;
           border-radius: 4px;
-          background: rgba(150, 150, 150, 0.2);
+          background: var(--page-muted, rgba(150, 150, 150, 0.2));
           overflow: hidden;
         }
         
@@ -93,20 +94,57 @@ export default function Dashboard({ items, activeSection, onSectionClick, theme,
         }
 
         .dashboard-container {
-          animation: var(--theme-dark) ? dashboardGlowDark 4s ease-in-out infinite : dashboardGlow 4s ease-in-out infinite;
+          animation: dashboardGlow 4s ease-in-out infinite;
+        }
+        
+        [data-theme='dark'] .dashboard-container {
+          animation: dashboardGlowDark 4s ease-in-out infinite;
+        }
+
+        .glass-surface {
+          background: var(--page-surface, rgba(255, 255, 255, 0.75));
+          backdrop-filter: blur(44px);
+        }
+
+        .ios-glass-button {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(200, 200, 200, 0.2) 100%);
+          box-shadow: 
+            inset 0 2px 3px rgba(255, 255, 255, 0.9),
+            inset -1px -1px 2px rgba(0, 0, 0, 0.08),
+            0 4px 12px rgba(0, 0, 0, 0.05);
+          border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme='dark'] .ios-glass-button {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.08) 100%);
+          box-shadow: 
+            inset 0 1px 2px rgba(255, 255, 255, 0.4), 
+            inset -1px -1px 2px rgba(0, 0, 0, 0.3),
+            0 4px 12px rgba(0, 0, 0, 0.4);
+          border: 1px solid var(--page-border, rgba(255, 255, 255, 0.15));
         }
       `}</style>
 
       {/* Outer wrapper for drop-shadow and glow */}
       <div 
-        className="dashboard-container relative pointer-events-auto rounded-[44px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(255,255,255,0.05)] ring-1 ring-black/5 dark:ring-white/10 overflow-hidden transition-all duration-500"
-        style={{ WebkitMaskImage: '-webkit-radial-gradient(white, black)' }} // Fix for iOS Safari sharp edges bleeding
+        className="dashboard-container relative pointer-events-auto rounded-[44px] overflow-hidden transition-all duration-500"
+        style={{ 
+          WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+          borderColor: 'var(--page-border)',
+          borderWidth: '1px',
+        } as React.CSSProperties} 
       >
         {/* The glass surface */}
-        <div className="absolute inset-0 z-0 bg-white/40 dark:bg-black/30 backdrop-blur-xl" />
+        <div className="absolute inset-0 z-0 glass-surface" />
         
         {/* Inner glow effect for premium feel - animated white line */}
-        <div className="absolute inset-0 z-0 rounded-[44px] shadow-[inset_0_1px_0px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_0px_rgba(255,255,255,0.1)] pointer-events-none" />
+        <div className="absolute inset-0 z-0 rounded-[44px] transition-shadow duration-300" 
+          style={{
+            boxShadow: theme === 'dark' 
+              ? 'inset 0 1px 1px rgba(255,255,255,0.15)' 
+              : 'inset 0 1px 1px rgba(255,255,255,0.6)'
+          }} 
+        />
 
         <nav className="relative z-10 flex w-max max-w-full items-center gap-1 px-3 py-2 transition-colors duration-300 sm:gap-2 sm:px-4 sm:py-3">
           {items.map((item) => {
@@ -122,15 +160,25 @@ export default function Dashboard({ items, activeSection, onSectionClick, theme,
                 document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' }); 
               }}
               aria-current={isActive ? 'page' : undefined}
-              className={`group/dash relative flex items-center justify-center rounded-full p-2.5 transition-all duration-[400ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-1.5 hover:scale-[1.12] sm:p-3 ${
+              className={`group/dash relative flex items-center justify-center rounded-full p-2.5 transition-all duration-300 sm:p-3 ${
                 isActive
-                  ? 'text-[var(--page-surface)] shadow-[0_12px_30px_rgba(16,32,58,0.22)] dark:shadow-[0_12px_30px_rgba(255,255,255,0.25)] before:absolute before:inset-0 before:bg-[var(--page-text)] before:rounded-full before:z-[-1]'
-                  : 'text-[var(--page-muted)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_8px_24px_rgba(255,255,255,0.15)] before:absolute before:inset-0 before:bg-[var(--page-border)] before:scale-50 before:opacity-0 hover:before:scale-100 hover:before:opacity-100 before:transition-all before:duration-[400ms] before:rounded-full before:z-[-1]'
+                  ? 'text-[var(--page-text)] ios-glass-button'
+                  : 'text-[var(--page-muted)] hover:text-[var(--page-text)] hover:ios-glass-button'
               }`}
               style={{ '--dash-color': item.color } as React.CSSProperties}
               title={item.label}
             >
-              <item.icon size={18} strokeWidth={2.5} className={`transition-all duration-[400ms] relative z-10 ${isActive ? 'scale-110 drop-shadow-md' : 'group-hover/dash:scale-110'}`} />
+              <item.icon size={18} strokeWidth={2.5} className="transition-transform duration-300 relative z-10 group-hover/dash:scale-110" />
+              {isActive && (
+                <motion.div
+                  layoutId="activeDashboardSection"
+                  className="absolute -bottom-2 left-1/2 h-[3px] w-6 -translate-x-1/2 rounded-full bg-[#00FF14]"
+                  style={{
+                    boxShadow: '0 0 10px rgba(0, 255, 20, 0.6), 0 0 4px rgba(0, 255, 20, 0.4)'
+                  }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                />
+              )}
             </a>
           );
         })}
@@ -144,12 +192,18 @@ export default function Dashboard({ items, activeSection, onSectionClick, theme,
           onClick={onToggleTheme}
           aria-label="Toggle theme"
           title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-          className="group/dash relative flex items-center justify-center rounded-full p-2.5 transition-all duration-[400ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-1.5 hover:scale-[1.12] sm:p-3 text-[var(--page-muted)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_8px_24px_rgba(255,255,255,0.15)] before:absolute before:inset-0 before:bg-[var(--page-border)] before:scale-50 before:opacity-0 hover:before:scale-100 hover:before:opacity-100 before:transition-all before:duration-[400ms] before:rounded-full before:z-[-1]"
+          className="group/dash relative flex items-center justify-center rounded-full p-2.5 transition-all duration-300 sm:p-3 text-[var(--page-muted)] hover:text-[var(--page-text)] hover:ios-glass-button"
         >
-          {theme === 'dark' ? <SunMedium size={18} strokeWidth={2.5} className="relative z-10 transition-transform duration-[400ms] group-hover/dash:scale-110" /> : <MoonStar size={18} strokeWidth={2.5} className="relative z-10 transition-transform duration-[400ms] group-hover/dash:scale-110" />}
+          {theme === 'dark' ? <SunMedium size={18} strokeWidth={2.5} className="relative z-10 transition-transform duration-300 group-hover/dash:scale-110" /> : <MoonStar size={18} strokeWidth={2.5} className="relative z-10 transition-transform duration-300 group-hover/dash:scale-110" />}
         </button>
 
-        <span className="ml-1 hidden items-center gap-2 rounded-full border border-[var(--page-border)] bg-[var(--page-chip)] pl-1.5 pr-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--page-text)] sm:inline-flex shadow-[0_2px_8px_rgba(0,0,0,0.06)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.12)]">
+        <span className="ml-1 hidden items-center gap-2 rounded-full border transition-all duration-300 pl-1.5 pr-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--page-text)] sm:inline-flex" 
+          style={{
+            borderColor: 'var(--page-border)',
+            backgroundColor: 'var(--page-chip, rgba(255, 255, 255, 0.4))',
+            boxShadow: theme === 'dark' ? '0 2px 8px rgba(0,0,0,0.2)' : '0 2px 8px rgba(0,0,0,0.05)'
+          }}
+        >
           <img src={logoSrc} alt="Logo" className="w-7 h-7 rounded-full object-contain" />
           Sachin Ram
         </span>

@@ -611,31 +611,31 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const sections = dashboardItems
-      .map((item) => document.getElementById(item.id))
-      .filter((section): section is HTMLElement => section !== null);
+    const handleScroll = () => {
+      const sections = dashboardItems
+        .map((item) => document.getElementById(item.id))
+        .filter((section): section is HTMLElement => section !== null);
 
-    if (!sections.length) return;
+      if (!sections.length) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntries = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+      const scrollPosition = window.scrollY + window.innerHeight / 2.5;
 
-        if (!visibleEntries.length) return;
+      let currentSection = sections[0].id;
+      for (const section of sections) {
+        // offsetTop works if the parent is positioned relatively, but we can do bounding client rect + scrollY
+        const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+        if (sectionTop <= scrollPosition) {
+          currentSection = section.id;
+        }
+      }
 
-        setActiveSection(visibleEntries[0].target.id as (typeof dashboardItems)[number]['id']);
-      },
-      {
-        rootMargin: '-18% 0px -52% 0px',
-        threshold: [0.2, 0.35, 0.5, 0.7],
-      },
-    );
+      setActiveSection(currentSection as (typeof dashboardItems)[number]['id']);
+    };
 
-    sections.forEach((section) => observer.observe(section));
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
 
-    return () => observer.disconnect();
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const bringAppToFront = useCallback((id: AppId) => {
@@ -855,8 +855,17 @@ export default function App() {
           </div>
           <div className="space-y-5">
             <p className="section-kicker">Full Portfolio</p>
-            <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-[var(--page-text)] md:text-6xl">
-              SACHIN RAM ES
+            <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-[var(--page-text)] md:text-6xl flex items-center">
+              <motion.span
+                initial={{ width: 0 }}
+                whileInView={{ width: 'auto' }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: "easeInOut" }}
+                className="inline-block overflow-hidden whitespace-nowrap"
+              >
+                SACHIN RAM ES
+              </motion.span>
+              <span className="ml-[2px] inline-block h-[1em] w-[4px] bg-[var(--page-text)] animate-[full-blink_1s_step-start_infinite]" />
             </h1>
             <p className="max-w-2xl text-lg leading-8 text-[var(--page-muted)] md:text-xl">
               Full-Stack Developer and Coding Enthusiast building polished interfaces, dependable systems, and practical
@@ -1146,33 +1155,45 @@ export default function App() {
             />
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
-            <a className="contact-link contact-link-strong group/contact transition-colors duration-300 hover:border-[#EA4335]/30 hover:bg-[#EA4335]/5" href="mailto:sachinram6363@gmail.com">
-              <Mail size={16} className="transition-colors group-hover/contact:text-[#EA4335]" />
-              <span>
-                <strong className="transition-colors group-hover/contact:text-[#EA4335]">Email</strong>
-                <small>sachinram6363@gmail.com</small>
-              </span>
+            <a className="contact-link contact-link-strong group/contact relative overflow-hidden transition-colors duration-300 hover:bg-white/5" href="mailto:sachinram6363@gmail.com">
+              <div className="relative z-10 flex items-center gap-3">
+                <Mail size={16} className="text-[var(--page-muted)]" />
+                <span className="flex flex-col">
+                  <strong className="text-[var(--page-text)] font-semibold">Email</strong>
+                  <small className="text-[var(--page-muted)] text-xs">sachinram6363@gmail.com</small>
+                </span>
+              </div>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Gmail" className="absolute -right-4 top-1/2 h-[120%] w-auto max-w-none -translate-y-1/2 opacity-10 grayscale [mask-image:linear-gradient(to_right,transparent,black)] group-hover/contact:opacity-100 group-hover/contact:grayscale-0 transition-all duration-500 pointer-events-none" />
             </a>
-            <a className="contact-link contact-link-strong group/contact transition-colors duration-300 hover:border-black/30 dark:hover:border-white/30 hover:bg-black/5 dark:hover:bg-white/5" href="https://github.com/SachinRam18/" target="_blank" rel="noreferrer">
-              <Github size={16} className="transition-colors group-hover/contact:text-black dark:group-hover/contact:text-white" />
-              <span>
-                <strong className="transition-colors group-hover/contact:text-black dark:group-hover/contact:text-white">GitHub</strong>
-                <small>github.com/SachinRam18/</small>
-              </span>
+            <a className="contact-link contact-link-strong group/contact relative overflow-hidden transition-colors duration-300 hover:bg-white/5" href="https://github.com/SachinRam18/" target="_blank" rel="noreferrer">
+              <div className="relative z-10 flex items-center gap-3">
+                <Github size={16} className="text-[var(--page-muted)]" />
+                <span className="flex flex-col">
+                  <strong className="text-[var(--page-text)] font-semibold">GitHub</strong>
+                  <small className="text-[var(--page-muted)] text-xs">github.com/SachinRam18/</small>
+                </span>
+              </div>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub" className="absolute -right-4 top-1/2 h-[120%] w-auto max-w-none -translate-y-1/2 opacity-10 dark:invert [mask-image:linear-gradient(to_right,transparent,black)] group-hover/contact:opacity-100 transition-all duration-500 pointer-events-none" />
             </a>
-            <a className="contact-link contact-link-strong group/contact transition-colors duration-300 hover:border-[#0A66C2]/30 hover:bg-[#0A66C2]/5" href="https://linkedin.com" target="_blank" rel="noreferrer">
-              <Linkedin size={16} className="transition-colors group-hover/contact:text-[#0A66C2]" />
-              <span>
-                <strong className="transition-colors group-hover/contact:text-[#0A66C2]">LinkedIn</strong>
-                <small>linkedin.com</small>
-              </span>
+            <a className="contact-link contact-link-strong group/contact relative overflow-hidden transition-colors duration-300 hover:bg-white/5" href="https://linkedin.com" target="_blank" rel="noreferrer">
+              <div className="relative z-10 flex items-center gap-3">
+                <Linkedin size={16} className="text-[var(--page-muted)]" />
+                <span className="flex flex-col">
+                  <strong className="text-[var(--page-text)] font-semibold">LinkedIn</strong>
+                  <small className="text-[var(--page-muted)] text-xs">linkedin.com</small>
+                </span>
+              </div>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/8/81/LinkedIn_icon.svg" alt="LinkedIn" className="absolute -right-4 top-1/2 h-[120%] w-auto max-w-none -translate-y-1/2 opacity-10 grayscale [mask-image:linear-gradient(to_right,transparent,black)] group-hover/contact:opacity-100 group-hover/contact:grayscale-0 transition-all duration-500 pointer-events-none" />
             </a>
-            <a className="contact-link contact-link-strong group/contact transition-colors duration-300 hover:border-[#34A853]/30 hover:bg-[#34A853]/5" href="tel:+919789010679">
-              <Phone size={16} className="transition-colors group-hover/contact:text-[#34A853]" />
-              <span>
-                <strong className="transition-colors group-hover/contact:text-[#34A853]">Phone</strong>
-                <small>+91 97890 10679</small>
-              </span>
+            <a className="contact-link contact-link-strong group/contact relative overflow-hidden transition-colors duration-300 hover:bg-white/5" href="tel:+919789010679">
+              <div className="relative z-10 flex items-center gap-3">
+                <Phone size={16} className="text-[var(--page-muted)]" />
+                <span className="flex flex-col">
+                  <strong className="text-[var(--page-text)] font-semibold">Phone</strong>
+                  <small className="text-[var(--page-muted)] text-xs">+91 97890 10679</small>
+                </span>
+              </div>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" className="absolute -right-4 top-1/2 h-[120%] w-auto max-w-none -translate-y-1/2 opacity-10 grayscale [mask-image:linear-gradient(to_right,transparent,black)] group-hover/contact:opacity-100 group-hover/contact:grayscale-0 transition-all duration-500 pointer-events-none" />
             </a>
           </div>
         </RevealCard>
