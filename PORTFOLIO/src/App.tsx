@@ -212,7 +212,6 @@ const heroStats: HeroStat[] = [
   { label: 'Status', value: 'Open to opportunities', icon: HeartHandshake },
 ];
 
-const heroSignals = ['Interactive presentation hero', 'Scroll to the full portfolio', 'Theme-aware glassmorphism'];
 
 function DesktopWidgets() {
   return (
@@ -707,23 +706,21 @@ export default function App() {
           />
         </div>
 
-        <div className="relative mx-auto flex min-h-[calc(90svh-3rem)] md:min-h-[calc(128svh-3rem)] w-full max-w-[1500px] flex-col items-center justify-center gap-8 py-4">
+        <div className="relative mx-auto flex min-h-[calc(90svh-3rem)] md:min-h-[calc(128svh-3rem)] w-full max-w-[1500px] flex-col items-center justify-center gap-12 py-24 sm:py-32 lg:py-40">
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
-            className="hero-copy mx-auto max-w-5xl text-center"
+            className="hero-copy mx-auto max-w-4xl text-center px-4"
           >
-            <p className="section-kicker">macOS-inspired portfolio</p>
-            <h1 className="mt-4 text-4xl font-semibold tracking-tight text-[var(--page-text)] md:text-6xl lg:text-7xl">
+            <h1 className="text-4xl font-semibold tracking-tight text-[var(--page-text)] sm:text-5xl md:text-6xl lg:text-7xl">
               Engineering intuition into digital interfaces.
             </h1>
-            <p className="mx-auto mt-5 max-w-3xl text-base leading-8 text-[var(--page-muted)] md:text-lg">
-              The presentation window below is just the start. Scroll down for the full portfolio sections: About, Skills,
-              Projects, Experience, and Contact.
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[var(--page-muted)] sm:text-lg md:text-xl">
+              Specializing in scalable architecture, interactive front-ends, and experiences that put users first. Building the future one polished component at a time.
             </p>
 
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <div className="mt-10 flex flex-wrap justify-center gap-4">
               <a className="pill-button" href="#projects" onClick={(e) => { e.preventDefault(); document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); }}>
                 <FolderCode size={14} /> Projects
               </a>
@@ -733,14 +730,6 @@ export default function App() {
               <a className="pill-button" href="#contact" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}>
                 <Mail size={14} /> Contact
               </a>
-            </div>
-
-            <div className="mt-7 flex flex-wrap justify-center gap-3">
-              {heroSignals.map((signal) => (
-                <span key={signal} className="hero-chip">
-                  {signal}
-                </span>
-              ))}
             </div>
           </motion.div>
 
