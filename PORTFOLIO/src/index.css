@@ -90,11 +90,11 @@
     --page-shadow: 0 32px 80px rgba(90, 130, 180, 0.08), inset 0 2px 4px rgba(255,255,255,0.8);
     --page-chip: rgba(255, 255, 255, 0.85);
 
-    --neon-bg: #22c55e;
-    --neon-color: #22c55e;
-    --neon-glow: rgba(34, 197, 94, 0.4);
-    --neon-glow-spread: rgba(34, 197, 94, 0.2);
-    --neon-glow-subtle: rgba(34, 197, 94, 0.15);
+    --neon-bg: #00FF14;
+    --neon-color: #00FF14;
+    --neon-glow: rgba(0, 255, 20, 0.6);
+    --neon-glow-spread: rgba(0, 255, 20, 0.4);
+    --neon-glow-subtle: rgba(0, 255, 20, 0.3);
   }
 
   body[data-theme='dark'] {
