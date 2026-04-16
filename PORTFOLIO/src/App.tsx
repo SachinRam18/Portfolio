@@ -94,6 +94,8 @@ type ProjectCard = {
   description: string;
   tech: string[];
   image?: string;
+  imageLight?: string;
+  imageDark?: string;
 };
 
 type ExperienceCard = {
@@ -181,10 +183,12 @@ const projectCards: ProjectCard[] = [
     image: '/gun4.png',
   },
   {
-    title: 'AI Color-Grading Web Platform',
+    title: 'AI-Driven SaaS Renewal Optimization Engine',
     description:
-      'An AI-assisted cinematic color-grading system that reduces manual editing effort and speeds up previewing looks.',
+      'AI-driven system that predicts customer churn and dynamically generates optimized renewal offers. Simulates multi-round negotiation using a utility-based decision model to maximize retention.',
     tech: ['Python', 'OpenCV', 'NumPy', 'CNN'],
+    imageLight: '/aixai_light.jpg',
+    imageDark: '/aixai_dark.jpg',
   },
 ];
 
@@ -1052,6 +1056,12 @@ export default function App() {
                   {project.image ? (
                     <img 
                       src={project.image} 
+                      alt={project.title} 
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-[1.05]" 
+                    />
+                  ) : project.imageLight && project.imageDark ? (
+                    <img 
+                      src={theme === 'dark' ? project.imageLight : project.imageDark} 
                       alt={project.title} 
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-[1.05]" 
                     />
