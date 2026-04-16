@@ -180,7 +180,8 @@ const projectCards: ProjectCard[] = [
     description:
       'Ensures weapons operate only in authorized zones and locks the trigger outside permitted areas.',
     tech: ['ESP32', 'Embedded C', 'RFID', 'React.js'],
-    image: '/gun4.png',
+    imageLight: '/gun4.png',
+    imageDark: '/gun3.png',
   },
   {
     title: 'AI-Driven SaaS Renewal Optimization Engine',
