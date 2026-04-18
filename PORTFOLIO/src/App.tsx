@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
+import { AuroraBackground } from './components/AuroraBackground';
 import type { LucideIcon } from 'lucide-react';
 import {
   Award,
@@ -50,10 +51,11 @@ import Dock from './components/macOS/Dock';
 import Dashboard from './components/macOS/Dashboard';
 import Window from './components/macOS/Window';
 import DesktopIcon from './components/macOS/DesktopIcon';
+import GlassCursor from './components/macOS/GlassCursor';
+
 import AboutMe from './components/apps/AboutMe';
 import Projects from './components/apps/Projects';
 import Resume from './components/apps/Resume';
-import GlassCursor from './components/macOS/GlassCursor';
 
 const FlutterLogomark = ({ size = 24, className = '', strokeWidth, color }: { size?: number | string, className?: string, strokeWidth?: number | string, color?: string }) => (
   <div 
@@ -188,8 +190,8 @@ const projectCards: ProjectCard[] = [
     description:
       'AI-driven system that predicts customer churn and dynamically generates optimized renewal offers. Simulates multi-round negotiation using a utility-based decision model to maximize retention.',
     tech: ['Python', 'OpenCV', 'NumPy', 'CNN'],
-    imageLight: '/aixai_light.jpg',
-    imageDark: '/aixai_dark.jpg',
+    imageLight: '/aixai_dark.png',
+    imageDark: '/aixai_light.png',
   },
 ];
 
@@ -220,7 +222,12 @@ const heroStats: HeroStat[] = [
 
 function DesktopWidgets() {
   return (
-    <div className="pointer-events-none absolute left-5 top-12 z-10 flex w-[220px] flex-col gap-3 md:w-[250px]">
+    <motion.div 
+      className="pointer-events-none absolute left-5 top-12 z-10 flex w-[220px] flex-col gap-3 md:w-[250px]"
+      initial={{ opacity: 0, x: -20, y: -20 }}
+      animate={{ opacity: 1, x: 0, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' }}
+    >
       <div className="glass-dark rounded-[24px] p-4 text-white shadow-[0_18px_30px_rgba(0,0,0,0.22)]">
         <div className="flex items-center justify-between text-white/75">
           <span className="text-[12px] font-semibold uppercase tracking-[0.24em]">Sunday</span>
@@ -245,7 +252,7 @@ function DesktopWidgets() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -265,9 +272,9 @@ function RevealCard({ children, className = '', id = '', delay = 0 }: { children
       id={id}
       initial={{ opacity: 0, y: 40, scale: 0.98 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: false, margin: '-10%' }}
+      viewport={{ once: true, margin: '-5%' }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay }}
-      className={`glass-panel ${className}`}
+      className={`glass-panel will-change-transform ${className}`}
     >
       {children}
     </motion.section>
@@ -555,13 +562,42 @@ function ExperiencePhoneMockup({
 }
 
 export default function App() {
+  // Remove heroProgress from state as it causes re-renders on scroll
   const [apps, setApps] = useState<AppState[]>(INITIAL_APPS);
   const [maxZIndex, setMaxZIndex] = useState(12);
   const [theme, setTheme] = useState<ThemeMode>('light');
-  const [heroProgress, setHeroProgress] = useState(0);
   const [activeSection, setActiveSection] = useState<(typeof dashboardItems)[number]['id']>('about');
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [logoIndex, setLogoIndex] = useState(0);
+
+  const loadingLogos = [
+    "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg",
+    "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg",
+    "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg",
+    "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg"
+  ];
+
+  useEffect(() => {
+    // Hide the loader with a smooth animation after a short delay
+    // This allows time for fonts, scripts, and heavy DOM elements to initialize
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 6000); // Prolonged loading
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!isLoading) return;
+    const interval = setInterval(() => {
+      setLogoIndex((prev) => (prev + 1) % loadingLogos.length);
+    }, 1200); // Slower, ticking-like effect
+    return () => clearInterval(interval);
+  }, [isLoading]);
+
   const heroRef = useRef<HTMLElement | null>(null);
   const maxZIndexRef = useRef(12);
+  const macbookSceneRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const storedTheme = window.localStorage.getItem('portfolio-theme');
@@ -597,13 +633,19 @@ export default function App() {
 
     const updateHeroProgress = () => {
       const hero = heroRef.current;
-      if (!hero) return;
+      const scene = macbookSceneRef.current;
+      if (!hero || !scene) return;
 
       const rect = hero.getBoundingClientRect();
       const viewportHeight = window.innerHeight || 1;
       const travel = Math.max(rect.height - viewportHeight, 1);
       const progress = Math.min(Math.max((-rect.top) / travel, 0), 1);
-      setHeroProgress(progress);
+      
+      const scale = 1 - progress * 0.08;
+      const shiftY = -progress * 52;
+      
+      scene.style.setProperty('--scene-shift-y', `${shiftY}px`);
+      scene.style.setProperty('--scene-scale', scale.toString());
     };
 
     const handleScroll = () => {
@@ -683,68 +725,145 @@ export default function App() {
   }, [bringAppToFront]);
 
   const activeApp = apps.find((app) => app.isOpen && !app.isMinimized && app.zIndex === maxZIndex);
-  const sceneScale = 1 - heroProgress * 0.08;
-  const sceneShiftY = -heroProgress * 52;
 
   return (
-    <div className="portfolio-page relative min-h-screen w-full overflow-x-hidden" data-theme={theme}>
-      <GlassCursor />
+    <>
+      <AnimatePresence>
+        {isLoading ? (
+          <motion.div
+            key="loading-screen"
+            initial={{ opacity: 1 }}
+            exit={{ 
+              opacity: 0, 
+              y: "-100%", // Slides up like a curtain
+              filter: "blur(20px)",
+              transition: { 
+                duration: 1.2, 
+                ease: [0.25, 1, 0.5, 1] // Elegant ease out
+              }
+            }}
+            className={`fixed inset-0 z-[999999] flex flex-col items-center justify-center ${theme === 'dark' ? 'bg-[#0a0b0e]' : 'bg-[#eef2f7]'}`}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="relative flex items-center justify-center"
+            >
+              {/* Neon Green outer pulsing ring */}
+              <motion.div
+                animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.4, 0.1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-[-20px] rounded-full bg-green-500/20 blur-xl"
+              />
+              
+              {/* Neon Green spinning loading ring */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-[-4px] rounded-full border-[3px] border-transparent"
+                style={{
+                  borderTopColor: 'rgba(34, 197, 94, 0.9)', // Tailwind green-500
+                  borderRightColor: 'rgba(34, 197, 94, 0.1)',
+                  boxShadow: '0 0 15px rgba(34, 197, 94, 0.5)',
+                }}
+              />
+
+              <div className="flex h-28 w-28 items-center justify-center rounded-full bg-white/30 dark:bg-white/10 backdrop-blur-xl border border-white/50 dark:border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.1)] overflow-hidden relative">
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={logoIndex}
+                    src={loadingLogos[logoIndex]}
+                    initial={{ opacity: 0, scale: 0.5, filter: "blur(8px)", rotate: -10 }}
+                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)", rotate: 0 }}
+                    exit={{ opacity: 0, scale: 1.1, filter: "blur(8px)", rotate: 10 }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    className="absolute w-12 h-12 object-contain"
+                    style={{ 
+                      filter: theme === 'dark' 
+                        ? 'brightness(0) invert(1) opacity(0.85)' 
+                        : 'brightness(0) opacity(0.75)' // Deep dark crisp color on frosted glass
+                    }}
+                    alt="Loading framework logo"
+                  />
+                </AnimatePresence>
+              </div>
+            </motion.div>
+
+            <div className="mt-12 w-48 h-[1px] relative overflow-hidden bg-slate-200/20 dark:bg-slate-700/50">
+              <motion.div
+                initial={{ x: "-100%" }}
+                animate={{ x: "100%" }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-green-500 to-transparent blur-[1px]"
+              />
+            </div>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className={`mt-6 text-[10px] font-semibold uppercase tracking-[0.4em] ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}
+            >
+              Initializing Environment
+            </motion.p>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+
+      <AuroraBackground className={`portfolio-page relative min-h-screen w-full overflow-x-hidden ${isLoading ? 'h-screen overflow-hidden' : ''}`} data-theme={theme}>
+        <GlassCursor />
       {/* Top Navigation / Status Bar (optional, currently we rely on Dashboard) */}
 
       <section ref={heroRef} className="relative min-h-[90svh] overflow-hidden px-4 pb-12 pt-6 md:px-8 md:pt-8 md:min-h-[128svh]">
-        <div className="hero-backdrop pointer-events-none absolute inset-0" />
-        <div className="pointer-events-none absolute inset-0 opacity-100 z-0">
-          <motion.div
-            animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className={`absolute left-[8%] top-[6%] h-64 w-64 rounded-full blur-3xl ${theme === 'dark' ? 'bg-cyan-300/10' : 'bg-stone-300/40'}`}
-          />
-          <motion.div
-            animate={{ x: [0, -40, 0], y: [0, 40, 0] }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className={`absolute right-[8%] top-[12%] h-72 w-72 rounded-full blur-3xl ${theme === 'dark' ? 'bg-indigo-500/16' : 'bg-sky-200/50'}`}
-          />
-          <motion.div
-            animate={{ x: [0, 50, 0], y: [0, -30, 0] }}
-            transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-            className={`absolute bottom-[2%] left-1/2 h-60 w-[65%] -translate-x-1/2 rounded-full blur-3xl ${theme === 'dark' ? 'bg-purple-500/12' : 'bg-slate-300/35'}`}
-          />
-        </div>
+        {/* Old blobs removed to showcase the new AuroraBackground */}
 
         <div className="relative mx-auto flex min-h-[calc(90svh-3rem)] md:min-h-[calc(128svh-3rem)] w-full max-w-[1500px] flex-col items-center justify-center gap-12 py-24 sm:py-32 lg:py-40">
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: 'easeOut' }}
-            className="hero-copy mx-auto max-w-4xl text-center px-4"
-          >
-            <h1 className="text-4xl font-semibold tracking-tight text-[var(--page-text)] sm:text-5xl md:text-6xl lg:text-7xl">
-              Engineering intuition into digital interfaces.
-            </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[var(--page-muted)] sm:text-lg md:text-xl">
-              Specializing in scalable architecture, interactive front-ends, and experiences that put users first. Building the future one polished component at a time.
-            </p>
+          <AnimatePresence mode="wait">
+            {!isLoading && (
+              <motion.div
+                initial={{ opacity: 0, y: 40, filter: "blur(15px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 1.4, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="hero-copy mx-auto max-w-4xl text-center px-4"
+              >
+                <h1 className="text-4xl font-semibold tracking-tight text-[var(--page-text)] sm:text-5xl md:text-6xl lg:text-7xl">
+                  Engineering intuition into digital interfaces.
+                </h1>
+                <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[var(--page-muted)] sm:text-lg md:text-xl">
+                  Specializing in scalable architecture, interactive front-ends, and experiences that put users first. Building the future one polished component at a time.
+                </p>
 
-            <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <a className="pill-button" href="#projects" onClick={(e) => { e.preventDefault(); document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                <FolderCode size={14} /> Projects
-              </a>
-              <a className="pill-button" href="#about" onClick={(e) => { e.preventDefault(); document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                <User size={14} /> About
-              </a>
-              <a className="pill-button" href="#contact" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                <Mail size={14} /> Contact
-              </a>
-            </div>
-          </motion.div>
+                <div className="mt-10 flex flex-wrap justify-center gap-4">
+                  <motion.a initial={{ opacity: 0, y: 15, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.7, delay: 0.8, ease: 'easeOut' }} className="pill-button" href="#projects" onClick={(e) => { e.preventDefault(); document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                    <FolderCode size={14} /> Projects
+                  </motion.a>
+                  <motion.a initial={{ opacity: 0, y: 15, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.7, delay: 0.9, ease: 'easeOut' }} className="pill-button" href="#about" onClick={(e) => { e.preventDefault(); document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                    <User size={14} /> About
+                  </motion.a>
+                  <motion.a initial={{ opacity: 0, y: 15, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.7, delay: 1.0, ease: 'easeOut' }} className="pill-button" href="#contact" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                    <Mail size={14} /> Contact
+                  </motion.a>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          <div className="w-full overflow-x-hidden flex justify-center mt-8">
+          <AnimatePresence mode="wait">
+            {!isLoading && (
+              <motion.div 
+                initial={{ opacity: 0, y: 80, scale: 0.9, filter: "blur(15px)" }} 
+                animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }} 
+                transition={{ duration: 1.6, delay: 0.8, ease: [0.16, 1, 0.3, 1] }} 
+                className="w-full overflow-x-hidden flex justify-center mt-8"
+              >
             <div
+              ref={macbookSceneRef}
               className="macbook-scene relative mx-auto flex h-[260px] w-full max-w-[1100px] select-none justify-center sm:h-[420px] md:h-[680px] lg:h-[820px]"
               style={
                 {
-                  '--scene-shift-y': `${sceneShiftY}px`,
-                  '--scene-scale': sceneScale,
+                  '--scene-shift-y': '0px',
+                  '--scene-scale': '1',
                 } as React.CSSProperties
               }
             >
@@ -775,13 +894,29 @@ export default function App() {
                 <MenuBar theme={theme} />
                 <DesktopWidgets />
 
-                <div className="absolute right-4 top-12 z-10 flex flex-col gap-6 md:right-5 md:top-14">
-                  <DesktopIcon imgSrc="https://raw.githubusercontent.com/puruvj/macos-web/main/public/app-icons/finder/256.png" label="About Me" onClick={() => openApp('about')} />
-                  <DesktopIcon imgSrc="https://raw.githubusercontent.com/puruvj/macos-web/main/public/app-icons/vscode/256.png" label="Projects" onClick={() => openApp('projects')} />
-                  <DesktopIcon imgSrc="https://raw.githubusercontent.com/puruvj/macos-web/main/public/app-icons/notes/256.png" label="Resume" onClick={() => openApp('resume')} />
-                </div>
+                <motion.div 
+                  className="absolute right-4 top-12 z-10 flex flex-col gap-6 md:right-5 md:top-14"
+                  initial={{ opacity: 0, x: 20, y: -20 }}
+                  animate={{ opacity: 1, x: 0, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5, ease: 'easeOut' }}
+                >
+                  <motion.div initial={{ opacity: 0, scale: 0.8, y: -10 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.55, ease: 'easeOut' }}>
+                    <DesktopIcon imgSrc="https://raw.githubusercontent.com/puruvj/macos-web/main/public/app-icons/finder/256.png" label="About Me" onClick={() => openApp('about')} />
+                  </motion.div>
+                  <motion.div initial={{ opacity: 0, scale: 0.8, y: -10 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.6, ease: 'easeOut' }}>
+                    <DesktopIcon imgSrc="https://raw.githubusercontent.com/puruvj/macos-web/main/public/app-icons/vscode/256.png" label="Projects" onClick={() => openApp('projects')} />
+                  </motion.div>
+                  <motion.div initial={{ opacity: 0, scale: 0.8, y: -10 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.65, ease: 'easeOut' }}>
+                    <DesktopIcon imgSrc="https://raw.githubusercontent.com/puruvj/macos-web/main/public/app-icons/notes/256.png" label="Resume" onClick={() => openApp('resume')} />
+                  </motion.div>
+                </motion.div>
 
-                <div className="absolute bottom-22 left-6 z-10 hidden rounded-[22px] border border-white/14 bg-white/12 p-4 text-white shadow-[0_18px_26px_rgba(0,0,0,0.22)] backdrop-blur-xl lg:block">
+                <motion.div 
+                  className="absolute bottom-22 left-6 z-10 hidden rounded-[22px] border border-white/14 bg-white/12 p-4 text-white shadow-[0_18px_26px_rgba(0,0,0,0.22)] backdrop-blur-xl lg:block"
+                  initial={{ opacity: 0, y: 20, x: -20 }}
+                  animate={{ opacity: 1, y: 0, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.7, ease: 'easeOut' }}
+                >
                   <div className="flex items-center gap-3">
                     <div className="rounded-2xl bg-white/15 p-3">
                       <MonitorSmartphone size={20} />
@@ -791,7 +926,7 @@ export default function App() {
                       <p className="text-xs text-white/70">Draggable windows running on a 3D interface.</p>
                     </div>
                   </div>
-                </div>
+                </motion.div>
 
                 <Window
                   id="about"
@@ -843,24 +978,31 @@ export default function App() {
               </DeviceFrameset>
             </div>
           </div>
-          </div>
+            </motion.div>
+            )}
+          </AnimatePresence>
 
-          <div className={`mx-auto flex w-full max-w-4xl items-center justify-between gap-4 rounded-full border px-5 py-3 text-xs font-medium backdrop-blur-xl ${theme === 'dark' ? 'border-white/10 bg-white/6 text-white/80' : 'border-white/35 bg-white/30 text-slate-700 shadow-[0_18px_35px_rgba(100,120,160,0.12)]'}`}>
-            <span>Interactive window frame acts as an introduction.</span>
-            <span className={`inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.28em] ${theme === 'dark' ? 'text-white/55' : 'text-slate-500'}`}>
-              Scroll <ChevronDown size={12} /> to open the full portfolio
-            </span>
-          </div>
+          <AnimatePresence mode="wait">
+            {!isLoading && (
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6, ease: 'easeOut' }} className={`mx-auto flex w-full max-w-4xl items-center justify-between gap-4 rounded-full border px-5 py-3 text-xs font-medium backdrop-blur-xl ${theme === 'dark' ? 'border-white/10 bg-white/6 text-white/80' : 'border-white/35 bg-white/30 text-slate-700 shadow-[0_18px_35px_rgba(100,120,160,0.12)]'}`}>
+                <span>Interactive window frame acts as an introduction.</span>
+                <span className={`inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.28em] ${theme === 'dark' ? 'text-white/55' : 'text-slate-500'}`}>
+                  Scroll <ChevronDown size={12} /> to open the full portfolio
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </section>
 
-      <main className="mx-auto flex w-full max-w-[1400px] flex-col gap-8 px-4 pb-24 md:px-8">
+      <main className="mx-auto flex w-full max-w-[1400px] flex-col gap-8 px-4 pb-24 md:px-8" style={{ contentVisibility: 'auto', containIntrinsicSize: '1400px 6000px' }}>
         <RevealCard id="about" className="grid gap-8 p-6 md:p-8 lg:grid-cols-[200px_1.2fr_0.8fr] scroll-mt-28 items-center">
           <div className="group relative mx-auto h-40 w-40 overflow-hidden rounded-full shadow-sm shrink-0">
             <div className="absolute inset-0 z-10 rounded-full opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover:opacity-100 group-hover:bg-white/10 dark:group-hover:bg-black/10" />
             <img
               src="/pic1-modified.png"
               alt="Sachin Ram"
+              loading="lazy"
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           </div>
@@ -952,7 +1094,7 @@ export default function App() {
             <div className="mt-8 space-y-4">
               <div className="timeline-card flex items-center gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-white p-1.5 shadow-sm ring-1 ring-black/5 dark:bg-white/90">
-                  <img src="/psg.png" alt="PSG ITech Logo" className="h-full w-full object-contain" />
+                  <img src="/psg.png" alt="PSG ITech Logo" loading="lazy" className="h-full w-full object-contain" />
                 </div>
                 <div>
                   <p className="font-semibold text-[var(--page-text)]">PSG Institute of Technology and Applied Research</p>
@@ -966,7 +1108,7 @@ export default function App() {
 
               <div className="timeline-card flex items-center gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-white p-1.5 shadow-sm ring-1 ring-black/5 dark:bg-white/90">
-                  <img src="/ssm.png" alt="SSM School Logo" className="h-full w-full object-contain" />
+                  <img src="/ssm.png" alt="SSM School Logo" loading="lazy" className="h-full w-full object-contain" />
                 </div>
                 <div>
                   <p className="font-semibold text-[var(--page-text)]">Srimathi Sundaravalli Memorial School</p>
@@ -989,12 +1131,15 @@ export default function App() {
           />
 
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {skillGroups.map((group) => (
+            {skillGroups.map((group, idx) => (
               <motion.div 
                 key={group.title} 
                 className="skill-group-card will-change-transform"
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: '-3%' }}
+                transition={{ duration: 0.5, delay: idx * 0.08, ease: 'easeOut' }}
                 whileHover={{ y: -8, scale: 1.02 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
               >
                 <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--page-muted)]">
                   <Award size={13} />
@@ -1049,7 +1194,7 @@ export default function App() {
                 className="project-card will-change-transform"
                 initial={{ opacity: 0, y: 30, scale: 0.95 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: false, margin: '-5%' }}
+                viewport={{ once: true, margin: '-5%' }}
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 }}
                 whileHover={{ y: -8, scale: 1.02 }}
               >
@@ -1058,12 +1203,14 @@ export default function App() {
                     <img 
                       src={project.image} 
                       alt={project.title} 
+                      loading="lazy"
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-[1.05]" 
                     />
                   ) : project.imageLight && project.imageDark ? (
                     <img 
                       src={theme === 'dark' ? project.imageLight : project.imageDark} 
                       alt={project.title} 
+                      loading="lazy"
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-[1.05]" 
                     />
                   ) : (
@@ -1106,7 +1253,7 @@ export default function App() {
                   className="timeline-card flex items-start gap-4 will-change-transform"
                   initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: false, margin: '-5%' }}
+                  viewport={{ once: true, margin: '-5%' }}
                   transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: index * 0.15 }}
                   whileHover={{ y: -8, scale: 1.02 }}
                 >
@@ -1243,6 +1390,7 @@ export default function App() {
           }
         }} 
       />
-    </div>
+      </AuroraBackground>
+    </>
   );
 }

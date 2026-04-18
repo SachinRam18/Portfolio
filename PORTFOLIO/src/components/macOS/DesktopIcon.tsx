@@ -18,7 +18,8 @@ export default function DesktopIcon({ imgSrc, label, onClick }: DesktopIconProps
       <div className="relative flex h-14 w-14 items-center justify-center">
          <img 
             src={imgSrc} 
-            alt={label} 
+            alt={label}
+            loading="lazy"
             className="h-full w-full object-contain filter drop-shadow-md" 
             draggable={false} 
          />
