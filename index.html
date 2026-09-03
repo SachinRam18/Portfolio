@@ -1,674 +1,295 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>SACHIN RAM ES | Full-Stack Developer & AI Enthusiast</title>
-    <meta name="description" content="Portfolio of Sachin Ram ES — Full-Stack Developer, AI Enthusiast, and Computer Science student building scalable, intelligent applications.">
-    
-    <!-- Design System: Obsidian Neon (Tailwind + Material) -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"/>
-    
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "primary-container": "#00d2ff",
-                        "surface-bright": "#3a3939",
-                        "inverse-surface": "#e5e2e1",
-                        "on-tertiary-fixed": "#291800",
-                        "on-primary-fixed": "#001f28",
-                        "on-primary-fixed-variant": "#004e60",
-                        "surface-container-lowest": "#0a0a0a",
-                        "on-tertiary": "#442b00",
-                        "error-container": "#93000a",
-                        "inverse-primary": "#00677f",
-                        "surface-container-low": "#111111",
-                        "on-primary-container": "#00566a",
-                        "secondary-fixed": "#f9d8ff",
-                        "on-surface": "#f0eded",
-                        "on-error-container": "#ffdad6",
-                        "tertiary": "#ffd79f",
-                        "surface-container-highest": "#353534",
-                        "on-tertiary-container": "#6c4700",
-                        "surface-tint": "#47d6ff",
-                        "on-secondary-fixed-variant": "#6e208c",
-                        "tertiary-fixed": "#ffddb1",
-                        "primary": "#e32636",
-                        "secondary-container": "#6e208c",
-                        "primary-fixed-dim": "#47d6ff",
-                        "on-secondary": "#520070",
-                        "outline": "#859399",
-                        "surface-container-high": "#1e1e1e",
-                        "primary-fixed": "#b6ebff",
-                        "outline-variant": "#3c494e",
-                        "on-error": "#690005",
-                        "surface": "#0a0a0a",
-                        "on-background": "#e5e2e1",
-                        "background": "#0a0a0a",
-                        "tertiary-container": "#ffb229",
-                        "on-primary": "#fff",
-                        "error": "#ffb4ab",
-                        "on-surface-variant": "#8a8a8a",
-                        "inverse-on-surface": "#313030",
-                        "surface-container": "#181818",
-                        "secondary-fixed-dim": "#edb1ff",
-                        "secondary": "#edb1ff",
-                        "tertiary-fixed-dim": "#ffba4a",
-                        "surface-variant": "#353534",
-                        "surface-dim": "#0a0a0a",
-                        "on-secondary-fixed": "#320046",
-                        "on-secondary-container": "#e498ff"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"
-                    },
-                    "fontFamily": {
-                        "headline": ["Inter"], "body": ["Inter"], "label": ["Inter"], "mono": ["JetBrains Mono"]
-                    }
-                },
-            },
-        }
-    </script>
-    <link rel="stylesheet" href="styles.css?v=3">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sachin Ram ES | Portfolio</title>
+    <meta name="description" content="MacBook-styled portfolio for Sachin Ram ES, a full-stack developer and AI-focused engineering student.">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="font-body selection:bg-primary/30">
-    <!-- Page Loader -->
-    <div class="page-loader" aria-hidden="true">
-        <div class="loader-bar"></div>
-    </div>
+<body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
 
-    <!-- Custom Cursor -->
-    <div class="cursor-follower" aria-hidden="true"></div>
-
-    <!-- Atmospheric layers -->
-    <div class="grain-overlay" aria-hidden="true"></div>
-
-    <!-- Navigation -->
-    <nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-5xl rounded-full px-6 py-3 bg-black/60 backdrop-blur-xl flex justify-between items-center z-50 border border-white/[0.04]" id="main-nav">
-        <div class="text-lg font-black tracking-tighter text-stone-100">SACHIN RAM<span class="text-primary">.</span></div>
-        
-        <!-- Desktop Links -->
-        <div class="hidden md:flex items-center gap-8 font-sans tracking-tight text-sm">
-            <a class="text-primary font-bold transition-all" href="#home" data-section="home">Home</a>
-            <a class="text-stone-400 hover:text-primary transition-all" href="#about" data-section="about">About</a>
-            <a class="text-stone-400 hover:text-primary transition-all" href="#skills" data-section="skills">Skills</a>
-            <a class="text-stone-400 hover:text-primary transition-all" href="#projects" data-section="projects">Projects</a>
-            <a class="text-stone-400 hover:text-primary transition-all" href="#experience" data-section="experience">Experience</a>
-            <a class="text-stone-400 hover:text-primary transition-all" href="#contact" data-section="contact">Contact</a>
-        </div>
-
-        <div class="flex items-center gap-4">
-            <a class="hidden sm:inline-block bg-gradient-to-r from-[#e32636] to-[#b30000] text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest active:scale-90 transition-all shadow-[0_4px_15px_rgba(227,38,54,0.25)] hover:shadow-[0_8px_30px_rgba(227,38,54,0.35)] hover:-translate-y-0.5 btn-cta" href="#contact">
-                Hire Me
+    <div class="page-shell">
+        <header class="topbar reveal">
+            <a class="brand" href="#home">
+                <span class="brand-mark"></span>
+                <span>Sachin Ram ES</span>
             </a>
-            <button id="menu-toggle" class="md:hidden text-on-surface p-1">
-                <span class="material-symbols-outlined">menu</span>
-            </button>
-        </div>
-    </nav>
 
-    <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 bg-stone-950/95 backdrop-blur-2xl z-[49] flex flex-col items-center justify-center gap-8 hidden transition-all duration-300">
-        <a class="text-2xl font-black text-on-surface hover:text-primary transition-all" href="#home">Home</a>
-        <a class="text-2xl font-black text-on-surface hover:text-primary transition-all" href="#about">About</a>
-        <a class="text-2xl font-black text-on-surface hover:text-primary transition-all" href="#skills">Skills</a>
-        <a class="text-2xl font-black text-on-surface hover:text-primary transition-all" href="#projects">Projects</a>
-        <a class="text-2xl font-black text-on-surface hover:text-primary transition-all" href="#experience">Experience</a>
-        <a class="text-2xl font-black text-on-surface hover:text-primary transition-all" href="#contact">Contact</a>
-    </div>
+            <nav class="nav" id="site-nav" aria-label="Primary navigation">
+                <a href="#about">About</a>
+                <a href="#work">Work</a>
+                <a href="#experience">Experience</a>
+                <a href="#contact">Contact</a>
+            </nav>
 
-    <!-- ════════════════════════════════════════════
-         HERO SECTION
-         ════════════════════════════════════════════ -->
-    <header class="relative min-h-screen flex items-center justify-center pt-24 px-6 overflow-hidden" id="home">
-        <!-- Particle Background -->
-        <canvas id="particle-canvas"></canvas>
-
-        <!-- Ambient Orbs -->
-        <div class="ambient-orb ambient-orb--primary" aria-hidden="true"></div>
-        <div class="ambient-orb ambient-orb--secondary" aria-hidden="true"></div>
-        <div class="ambient-orb ambient-orb--accent" aria-hidden="true"></div>
-        
-        <div class="max-w-7xl mx-auto text-center relative z-10">
-            <span class="inline-block text-primary/80 text-xs font-black tracking-[0.25em] uppercase mb-6 opacity-0 animate-[fade-in-up_0.6s_0.1s_ease_forwards]" style="font-family: 'JetBrains Mono', monospace;">Software Architect & AI Specialist</span>
-            <h1 class="hero-title text-5xl md:text-[7rem] font-black tracking-tighter text-on-surface mb-6 leading-none" style="perspective: 1000px;">
-                SACHIN RAM ES
-            </h1>
-            <p class="text-xl md:text-2xl text-on-surface-variant font-medium mb-12 max-w-2xl mx-auto leading-relaxed opacity-0 animate-[fade-in-up_0.8s_1s_ease_forwards]" style="@keyframes fade-in-up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}">
-                Building scalable apps and intelligent systems with <span class="text-on-surface font-black typing-text">real-world impact.</span>
-            </p>
-            <div class="flex flex-col md:flex-row items-center justify-center gap-5 mb-16 px-4 opacity-0 animate-[fade-in-up_0.8s_1.3s_ease_forwards]">
-                <a class="w-full md:w-auto px-10 py-5 bg-gradient-to-r from-[#e32636] to-[#b30000] text-white font-black uppercase tracking-[0.15em] text-xs rounded-xl overflow-hidden shadow-[0_0_30px_rgba(227,38,54,0.2)] hover:shadow-[0_0_50px_rgba(227,38,54,0.4)] transition-all hover:-translate-y-1 active:scale-95 btn-cta" href="#projects">
-                    View My Projects
-                </a>
-                <a class="w-full md:w-auto px-10 py-5 border border-white/10 text-on-surface uppercase tracking-[0.15em] text-xs font-black rounded-xl hover:bg-white/5 hover:border-white/20 transition-all active:scale-95" href="#contact">
-                    Get In Touch
-                </a>
+            <div class="topbar-actions">
+                <a class="button button-ghost desktop-only" href="DOC-20240901-WA0015..pdf" target="_blank" rel="noreferrer">Resume</a>
+                <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
-            
-            <div class="flex justify-center gap-10 mt-8 opacity-0 animate-[fade-in-up_0.8s_1.6s_ease_forwards]">
-                <a class="social-icon group flex flex-col items-center gap-3" href="https://github.com/SachinRam18/" target="_blank">
-                    <div class="w-14 h-14 rounded-full border border-white/10 flex items-center justify-center group-hover:border-primary/50 group-hover:shadow-[0_0_25px_rgba(227,38,54,0.15)] transition-all duration-500 bg-white/[0.02]">
-                        <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">terminal</span>
-                    </div>
-                    <span class="text-[9px] uppercase tracking-[0.2em] text-stone-600 font-black group-hover:text-primary/60 transition-colors">GitHub</span>
-                </a>
-                <a class="social-icon group flex flex-col items-center gap-3" href="https://linkedin.com/in/sachinram" target="_blank">
-                    <div class="w-14 h-14 rounded-full border border-white/10 flex items-center justify-center group-hover:border-secondary/50 group-hover:shadow-[0_0_25px_rgba(237,177,255,0.15)] transition-all duration-500 bg-white/[0.02]">
-                        <span class="material-symbols-outlined text-on-surface-variant group-hover:text-secondary transition-colors">share</span>
-                    </div>
-                    <span class="text-[9px] uppercase tracking-[0.2em] text-stone-600 font-black group-hover:text-secondary/60 transition-colors">LinkedIn</span>
-                </a>
-            </div>
+        </header>
+
+        <div class="mobile-menu" id="mobile-menu">
+            <a href="#about">About</a>
+            <a href="#work">Work</a>
+            <a href="#experience">Experience</a>
+            <a href="#contact">Contact</a>
+            <a href="DOC-20240901-WA0015..pdf" target="_blank" rel="noreferrer">Resume</a>
         </div>
 
-        <!-- Scroll Indicator -->
-        <div class="scroll-indicator">
-            <div class="scroll-indicator-dot"></div>
-            <span class="text-[8px] uppercase tracking-[0.3em] text-stone-600 font-black">Scroll</span>
-        </div>
-    </header>
-
-    <!-- ════════════════════════════════════════════
-         ABOUT SECTION
-         ════════════════════════════════════════════ -->
-    <section class="py-32 px-6" id="about">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                <!-- ID Card -->
-                <div class="reveal-left id-card-wrapper">
-                    <div class="id-card">
-                        <!-- Photo -->
-                        <div class="id-card-photo">
-                            <img alt="Sachin Ram ES" src="pic1-modified.png"/>
-                        </div>
-                        
-                        <!-- Info Section -->
-                        <div class="id-card-info">
-                            <div class="id-card-header">
-                                <div>
-                                    <div class="id-card-title">Developer ID</div>
-                                    <h3 class="id-card-name">SACHIN RAM ES</h3>
-                                    <div class="id-card-role">Full-Stack Dev & AI Specialist</div>
-                                </div>
-                                <span class="id-card-badge">● Verified</span>
-                            </div>
-                            
-                            <div class="id-card-footer">
-                                <div class="id-card-number">ID: SR-2026-0811</div>
-                                <div class="id-card-stats">
-                                    <div class="id-card-stat-value counter-value" data-target="8.59">0</div>
-                                    <div class="id-card-stat-label">CGPA</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Text Content -->
-                <div class="reveal-right">
-                    <span class="text-primary/80 text-xs font-black tracking-[0.4em] uppercase mb-6 block" style="font-family: 'JetBrains Mono', monospace;">// The Vision</span>
-                    <h2 class="text-4xl md:text-6xl font-black tracking-tight text-on-surface mb-10 leading-tight">Engineering Digital<br><span class="gradient-text-animated">Excellence</span></h2>
-                    <p class="text-lg md:text-xl text-on-surface-variant leading-relaxed mb-12 font-medium">
-                        Passionate about bridging the gap between hardware and software. I specialize in <span class="text-on-surface font-bold">Full-stack development</span>, <span class="text-on-surface font-bold">Embedded systems</span>, and <span class="text-on-surface font-bold">AI solutions</span>. My approach focuses on creating <span class="text-primary font-black">robust</span> scalable systems.
+        <main>
+            <section class="hero" id="home">
+                <div class="hero-copy reveal">
+                    <p class="eyebrow">Full-stack developer portfolio</p>
+                    <h1>MacBook-framed work, product-minded execution, and clean storytelling.</h1>
+                    <p class="hero-text">
+                        I am Sachin Ram ES, a B.Tech CSBS student focused on full-stack systems, Flutter apps, and applied AI. This portfolio is designed as a desktop-like experience so the entire website feels like stepping into my workspace.
                     </p>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 stagger-children">
-                        <div class="about-mini-card p-6 bg-surface-container-low rounded-2xl border border-white/[0.04] group">
-                            <span class="material-symbols-outlined text-primary mb-4 text-3xl block group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">layers</span>
-                            <h3 class="font-black text-sm text-on-surface mb-2 uppercase tracking-widest">Full-Stack</h3>
-                            <p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">Web Architectures</p>
-                        </div>
-                        <div class="about-mini-card p-6 bg-surface-container-low rounded-2xl border border-white/[0.04] group">
-                            <span class="material-symbols-outlined text-tertiary mb-4 text-3xl block group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">memory</span>
-                            <h3 class="font-black text-sm text-on-surface mb-2 uppercase tracking-widest">IoT</h3>
-                            <p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">Hardware Sync</p>
-                        </div>
-                        <div class="about-mini-card p-6 bg-surface-container-low rounded-2xl border border-white/[0.04] group">
-                            <span class="material-symbols-outlined text-secondary mb-4 text-3xl block group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">psychology</span>
-                            <h3 class="font-black text-sm text-on-surface mb-2 uppercase tracking-widest">AI</h3>
-                            <p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">Intelligent Apps</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════
-         SKILLS / CORE PROFICIENCIES
-         ════════════════════════════════════════════ -->
-    <section class="py-32 px-6 bg-surface-container-lowest" id="skills">
-        <div class="max-w-7xl mx-auto">
-            <div class="mb-20 reveal text-center">
-                <span class="text-primary/70 text-xs font-black tracking-[0.4em] uppercase mb-6 block" style="font-family: 'JetBrains Mono', monospace;">// Capabilities</span>
-                <h2 class="proficiencies-title text-4xl md:text-6xl font-black tracking-tight text-on-surface">Core Proficiencies</h2>
-            </div>
-            <div class="proficiencies-grid grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Languages Card -->
-                <div class="proficiency-card p-8 rounded-xl reveal" style="transition-delay: 0.1s;">
-                    <div class="card-glow-effect"></div>
-                    <div class="card-header-section">
-                        <div class="card-header-icon-group">
-                            <span class="proficiency-icon material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">code</span>
-                            <h3 class="card-header-title">Languages</h3>
-                        </div>
-                    </div>
-                    <div class="space-y-5">
-                        <div class="skill-item">
-                            <div class="skill-item-header">
-                                <span class="skill-item-label">
-                                    <i class="devicon-python-plain"></i>
-                                    Python
-                                </span>
-                                <span class="skill-item-percent text-primary">90%</span>
-                            </div>
-                            <div class="proficiency-progress">
-                                <div class="proficiency-progress-bar" style="width: 90%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-item-header">
-                                <span class="skill-item-label">
-                                    <i class="devicon-java-plain"></i>
-                                    Java
-                                </span>
-                                <span class="skill-item-percent text-primary">85%</span>
-                            </div>
-                            <div class="proficiency-progress">
-                                <div class="proficiency-progress-bar" style="width: 85%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-item-header">
-                                <span class="skill-item-label">
-                                    <i class="devicon-c-plain"></i>
-                                    C
-                                </span>
-                                <span class="skill-item-percent text-primary">80%</span>
-                            </div>
-                            <div class="proficiency-progress">
-                                <div class="proficiency-progress-bar" style="width: 80%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-item-header">
-                                <span class="skill-item-label">
-                                    <i class="devicon-dart-plain"></i>
-                                    Dart
-                                </span>
-                                <span class="skill-item-percent text-primary">75%</span>
-                            </div>
-                            <div class="proficiency-progress">
-                                <div class="proficiency-progress-bar" style="width: 75%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-item-header">
-                                <span class="skill-item-label">
-                                    <i class="devicon-javascript-plain"></i>
-                                    JavaScript
-                                </span>
-                                <span class="skill-item-percent text-primary">85%</span>
-                            </div>
-                            <div class="proficiency-progress">
-                                <div class="proficiency-progress-bar" style="width: 85%;"></div>
-                            </div>
-                        </div>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#work">View Portfolio</a>
+                        <a class="button button-ghost" href="#contact">Contact</a>
                     </div>
                 </div>
 
-                <!-- Web Development Card -->
-                <div class="proficiency-card p-8 rounded-xl reveal" style="transition-delay: 0.2s;">
-                    <div class="card-glow-effect"></div>
-                    <div class="card-header-section">
-                        <div class="card-header-icon-group">
-                            <span class="proficiency-icon material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">web</span>
-                            <h3 class="card-header-title">Web & Mobile</h3>
-                        </div>
+                <div class="hero-notes reveal">
+                    <article class="note-card">
+                        <span class="note-label">Current focus</span>
+                        <strong>Building practical software for internships, placements, and production-minded teams.</strong>
+                    </article>
+                    <article class="note-card">
+                        <span class="note-label">Strength</span>
+                        <strong>UI clarity, backend logic, and engineering range across web, AI, and mobile.</strong>
+                    </article>
+                </div>
+
+                <div class="macbook-stage reveal">
+                    <div class="float-card float-left">
+                        <span class="float-label">Profile</span>
+                        <strong>8.59 CGPA</strong>
+                        <p>PSG iTech, CSBS</p>
                     </div>
-                    <div class="space-y-5">
-                        <div class="skill-item">
-                            <div class="skill-item-header">
-                                <span class="skill-item-label">
-                                    <i class="devicon-react-original"></i>
-                                    React.js
-                                </span>
-                                <span class="skill-item-percent text-primary">90%</span>
+
+                    <div class="float-card float-right">
+                        <span class="float-label">Availability</span>
+                        <strong>Open to roles</strong>
+                        <p>Internships and placement opportunities</p>
+                    </div>
+
+                    <div class="macbook">
+                        <div class="macbook-screen">
+                            <div class="screen-toolbar">
+                                <div class="traffic-lights">
+                                    <span class="red"></span>
+                                    <span class="yellow"></span>
+                                    <span class="green"></span>
+                                </div>
+                                <div class="toolbar-pill">sachinram.dev/portfolio</div>
+                                <div class="toolbar-meta">Desktop Portfolio</div>
                             </div>
-                            <div class="proficiency-progress">
-                                <div class="proficiency-progress-bar" style="width: 90%;"></div>
+
+                            <div class="screen-content">
+                                <aside class="screen-sidebar">
+                                    <div class="sidebar-avatar">
+                                        <img src="pic1-modified.png" alt="Sachin Ram ES portrait">
+                                    </div>
+                                    <h2>Sachin Ram ES</h2>
+                                    <p>Full-Stack Developer<br>AI Enthusiast<br>CSBS Student</p>
+                                    <div class="sidebar-status">Open to work</div>
+                                    <ul class="sidebar-list">
+                                        <li>Frontend systems</li>
+                                        <li>Spring Boot and Node.js</li>
+                                        <li>Flutter app delivery</li>
+                                        <li>Computer vision projects</li>
+                                    </ul>
+                                </aside>
+
+                                <div class="screen-main">
+                                    <section class="desktop-panel panel-intro">
+                                        <div>
+                                            <p class="mini-label">Portfolio</p>
+                                            <h3>Engineering with a product lens.</h3>
+                                        </div>
+                                        <p>
+                                            I build software that is meant to be used, not just demonstrated. My work spans backend performance, mobile workflows, hardware-linked systems, and AI-led experimentation.
+                                        </p>
+                                    </section>
+
+                                    <section class="desktop-grid">
+                                        <article class="desktop-card desktop-card-wide">
+                                            <div class="desktop-card-image">
+                                                <img src="bg2.jpg" alt="Smart Geo-Fenced Safety System preview">
+                                            </div>
+                                            <div class="desktop-card-copy">
+                                                <p class="mini-label">Featured project</p>
+                                                <h4>Smart Geo-Fenced Safety System</h4>
+                                                <p>ESP32, RFID, and monitoring logic combined into a location-aware security concept.</p>
+                                            </div>
+                                        </article>
+
+                                        <article class="desktop-card">
+                                            <p class="mini-label">Internship impact</p>
+                                            <h4>35% faster scheduling</h4>
+                                            <p>Improved timetable generation logic during my Java internship.</p>
+                                        </article>
+
+                                        <article class="desktop-card">
+                                            <p class="mini-label">Mobile delivery</p>
+                                            <h4>Flutter billing app</h4>
+                                            <p>Contributed to a billing workflow handling 100+ daily transactions.</p>
+                                        </article>
+
+                                        <article class="desktop-card desktop-card-tall">
+                                            <div class="desktop-card-image">
+                                                <img src="bg3.png" alt="AI Color-Grading Platform preview">
+                                            </div>
+                                            <div class="desktop-card-copy">
+                                                <p class="mini-label">AI and CV</p>
+                                                <h4>AI Color-Grading Platform</h4>
+                                                <p>OpenCV and CNN-supported image transformation for cinematic visual outputs.</p>
+                                            </div>
+                                        </article>
+                                    </section>
+                                </div>
                             </div>
                         </div>
-                        <div class="skill-item">
-                            <div class="skill-item-header">
-                                <span class="skill-item-label">
-                                    <i class="devicon-flutter-plain"></i>
-                                    Flutter
-                                </span>
-                                <span class="skill-item-percent text-primary">85%</span>
-                            </div>
-                            <div class="proficiency-progress">
-                                <div class="proficiency-progress-bar" style="width: 85%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-item-header">
-                                <span class="skill-item-label">
-                                    <i class="devicon-html5-plain"></i>
-                                    HTML / CSS
-                                </span>
-                                <span class="skill-item-percent text-primary">95%</span>
-                            </div>
-                            <div class="proficiency-progress">
-                                <div class="proficiency-progress-bar" style="width: 95%;"></div>
-                            </div>
+
+                        <div class="macbook-base">
+                            <span class="base-notch"></span>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <!-- Backend Card -->
-                <div class="proficiency-card p-8 rounded-xl reveal" style="transition-delay: 0.3s;">
-                    <div class="card-glow-effect"></div>
-                    <div class="card-header-section">
-                        <div class="card-header-icon-group">
-                            <span class="proficiency-icon material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">dns</span>
-                            <h3 class="card-header-title">Backend</h3>
-                        </div>
-                    </div>
-                    <div class="space-y-5">
-                        <div class="skill-item">
-                            <div class="skill-item-header">
-                                <span class="skill-item-label">
-                                    <i class="devicon-django-plain"></i>
-                                    Django
-                                </span>
-                                <span class="skill-item-percent text-primary">80%</span>
-                            </div>
-                            <div class="proficiency-progress">
-                                <div class="proficiency-progress-bar" style="width: 80%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-item-header">
-                                <span class="skill-item-label">
-                                    <i class="devicon-nodejs-plain"></i>
-                                    Node.js
-                                </span>
-                                <span class="skill-item-percent text-primary">70%</span>
-                            </div>
-                            <div class="proficiency-progress">
-                                <div class="proficiency-progress-bar" style="width: 70%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-item-header">
-                                <span class="skill-item-label">
-                                    <i class="devicon-mysql-plain"></i>
-                                    SQL / DBs
-                                </span>
-                                <span class="skill-item-percent text-primary">85%</span>
-                            </div>
-                            <div class="proficiency-progress">
-                                <div class="proficiency-progress-bar" style="width: 85%;"></div>
-                            </div>
-                        </div>
-                    </div>
+            <section class="portfolio-band reveal" id="about">
+                <div class="band-heading">
+                    <p class="eyebrow">About</p>
+                    <h2>A portfolio-first website instead of a generic landing page.</h2>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════
-         PROJECTS SECTION
-         ════════════════════════════════════════════ -->
-    <section class="py-32 px-6" id="projects">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-12 reveal">
-                <div class="max-w-3xl">
-                    <span class="text-primary/70 text-xs font-black tracking-[0.4em] uppercase mb-6 block" style="font-family: 'JetBrains Mono', monospace;">// Portfolio</span>
-                    <h2 class="text-4xl md:text-6xl font-black tracking-tight text-on-surface mb-6">Featured Innovation</h2>
-                    <p class="text-on-surface-variant font-medium text-lg max-w-xl">Deep tech engineering where software meets hardware and intelligence.</p>
+                <div class="band-grid">
+                    <article class="surface-card">
+                        <span class="surface-label">Education</span>
+                        <h3>PSG Institute of Technology and Applied Research</h3>
+                        <p>B.Tech Computer Science and Business Systems with a CGPA of 8.59.</p>
+                    </article>
+                    <article class="surface-card">
+                        <span class="surface-label">Approach</span>
+                        <h3>I optimize for usable output.</h3>
+                        <p>My work usually begins with structure, then performance, then presentation. That order keeps projects practical.</p>
+                    </article>
+                    <article class="surface-card">
+                        <span class="surface-label">Interests</span>
+                        <h3>Web systems, AI applications, and mobile products.</h3>
+                        <p>I like projects that combine strong engineering with visible user value.</p>
+                    </article>
                 </div>
-                <a class="group text-primary font-black uppercase tracking-[0.2em] text-[10px] flex items-center gap-4 hover:translate-x-3 transition-all duration-500" href="https://github.com/SachinRam18/" target="_blank">
-                    Explore Repository <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                </a>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <!-- Project 1 -->
-                <article class="project-card group relative bg-surface-container-low rounded-2xl overflow-hidden border border-white/[0.04] hover:border-primary/15 reveal" style="transition-delay: 0.1s;">
-                    <div class="aspect-video overflow-hidden relative">
-                        <img alt="Smart Geo-Fenced Safety System" class="project-image w-full h-full object-cover" src="bg2.jpg"/>
-                        <div class="project-overlay absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/30 to-transparent"></div>
-                    </div>
-                    <div class="p-8 md:p-10">
-                        <div class="flex gap-3 mb-5 flex-wrap">
-                            <span class="px-4 py-1.5 bg-primary/8 text-primary text-[9px] font-black uppercase tracking-widest rounded-full border border-primary/10">Embedded</span>
-                            <span class="px-4 py-1.5 bg-secondary/8 text-secondary text-[9px] font-black uppercase tracking-widest rounded-full border border-secondary/10">React</span>
-                        </div>
-                        <h3 class="text-2xl md:text-3xl font-black text-on-surface mb-3 group-hover:text-primary transition-colors duration-500">Smart Geo-Fenced Safety System</h3>
-                        <p class="text-on-surface-variant text-sm mb-8 leading-relaxed font-medium opacity-80">
-                            High-security IoT authorization leveraging ESP32 and RFID technology for location-based authentication and real-time monitoring.
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <div class="flex -space-x-3">
-                                <div class="w-9 h-9 rounded-full border-2 border-surface bg-surface-container-high flex items-center justify-center text-[9px] font-black text-on-surface-variant">C</div>
-                                <div class="w-9 h-9 rounded-full border-2 border-surface bg-surface-container-high flex items-center justify-center text-[9px] font-black text-on-surface-variant">JS</div>
-                                <div class="w-9 h-9 rounded-full border-2 border-surface bg-surface-container-high flex items-center justify-center text-[9px] font-black text-on-surface-variant">IOT</div>
-                            </div>
-                            <button class="px-6 py-2.5 rounded-xl border border-white/10 text-[9px] font-black uppercase tracking-[0.2em] group-hover:bg-primary group-hover:text-white group-hover:border-transparent transition-all duration-500 active:scale-95">Case Study</button>
-                        </div>
-                    </div>
-                </article>
-                <!-- Project 2 -->
-                <article class="project-card group relative bg-surface-container-low rounded-2xl overflow-hidden border border-white/[0.04] hover:border-primary/15 reveal" style="transition-delay: 0.2s;">
-                    <div class="aspect-video overflow-hidden relative">
-                        <img alt="AI Color-Grading Platform" class="project-image w-full h-full object-cover" src="bg3.png"/>
-                        <div class="project-overlay absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/30 to-transparent"></div>
-                    </div>
-                    <div class="p-8 md:p-10">
-                        <div class="flex gap-3 mb-5 flex-wrap">
-                            <span class="px-4 py-1.5 bg-primary-container/10 text-primary-container text-[9px] font-black uppercase tracking-widest rounded-full border border-primary-container/10">AI/ML</span>
-                            <span class="px-4 py-1.5 bg-tertiary/10 text-tertiary text-[9px] font-black uppercase tracking-widest rounded-full border border-tertiary/10">Vision</span>
-                        </div>
-                        <h3 class="text-2xl md:text-3xl font-black text-on-surface mb-3 group-hover:text-primary transition-colors duration-500">AI Color-Grading Platform</h3>
-                        <p class="text-on-surface-variant text-sm mb-8 leading-relaxed font-medium opacity-80">
-                            Cinematic image processing utilizing CNNs and OpenCV to automate professional color transformations with precision.
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <div class="flex -space-x-3">
-                                <div class="w-9 h-9 rounded-full border-2 border-surface bg-surface-container-high flex items-center justify-center text-[9px] font-black text-on-surface-variant">PY</div>
-                                <div class="w-9 h-9 rounded-full border-2 border-surface bg-surface-container-high flex items-center justify-center text-[9px] font-black text-on-surface-variant">CV</div>
-                                <div class="w-9 h-9 rounded-full border-2 border-surface bg-surface-container-high flex items-center justify-center text-[9px] font-black text-on-surface-variant">DL</div>
-                            </div>
-                            <button class="px-6 py-2.5 rounded-xl border border-white/10 text-[9px] font-black uppercase tracking-[0.2em] group-hover:bg-primary group-hover:text-white group-hover:border-transparent transition-all duration-500 active:scale-95">Case Study</button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
+            </section>
 
-    <!-- ════════════════════════════════════════════
-         EXPERIENCE TIMELINE
-         ════════════════════════════════════════════ -->
-    <section class="py-32 px-6 bg-surface-container-lowest" id="experience">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-24 reveal">
-                <span class="text-primary/70 text-xs font-black tracking-[0.4em] uppercase mb-6 block" style="font-family: 'JetBrains Mono', monospace;">// Trajectory</span>
-                <h2 class="text-4xl md:text-6xl font-black tracking-tight text-on-surface">Experience</h2>
-            </div>
-            <div class="space-y-12">
-                <div class="relative pl-12 group reveal" style="transition-delay: 0.1s;">
-                    <div class="timeline-line"></div>
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card bg-surface-container-low p-8 md:p-10 rounded-2xl group-hover:bg-surface-container transition-all duration-500">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-5 gap-3">
-                            <h3 class="text-xl md:text-2xl font-black text-on-surface uppercase tracking-tight">Lead Java Intern</h3>
-                            <span class="text-[9px] font-black px-4 py-1.5 bg-surface rounded-full text-primary uppercase tracking-[0.2em] border border-primary/15" style="font-family: 'JetBrains Mono', monospace;">Jun – Sep 2025</span>
+            <section class="section reveal" id="work">
+                <div class="section-heading">
+                    <p class="eyebrow">Selected work</p>
+                    <h2>Projects arranged like a visual portfolio, not a plain resume dump.</h2>
+                </div>
+                <div class="showcase-grid">
+                    <article class="showcase-card showcase-feature">
+                        <div class="showcase-media">
+                            <img src="bg2.jpg" alt="Smart Geo-Fenced Safety System">
                         </div>
-                        <div class="text-primary-container font-black uppercase tracking-widest text-[11px] mb-5">Yahweh Software Solutions</div>
-                        <ul class="text-on-surface-variant text-sm font-medium leading-relaxed space-y-3 list-disc list-inside opacity-90">
-                            <li>Led backend module integration for <span class="text-on-surface font-bold">EduDibon</span> platform supporting 3+ user roles.</li>
-                            <li>Optimized algorithmic scheduling, increasing generation speed by 35%.</li>
+                        <div class="showcase-copy">
+                            <span class="surface-label">IoT and systems</span>
+                            <h3>Smart Geo-Fenced Safety System</h3>
+                            <p>High-security authorization with ESP32 and RFID, designed around access control, real-time awareness, and system integration.</p>
+                        </div>
+                    </article>
+
+                    <article class="showcase-card">
+                        <div class="showcase-media">
+                            <img src="bg3.png" alt="AI Color-Grading Platform">
+                        </div>
+                        <div class="showcase-copy">
+                            <span class="surface-label">AI and computer vision</span>
+                            <h3>AI Color-Grading Platform</h3>
+                            <p>Computer vision pipeline using OpenCV and CNN-based logic to transform images into cinematic outputs.</p>
+                        </div>
+                    </article>
+
+                    <article class="showcase-card">
+                        <div class="showcase-media">
+                            <img src="bg1.jpg" alt="Portfolio design preview">
+                        </div>
+                        <div class="showcase-copy">
+                            <span class="surface-label">Frontend presentation</span>
+                            <h3>MacBook portfolio interface</h3>
+                            <p>A portfolio redesign built around a desktop metaphor, stronger visual hierarchy, and curated project storytelling.</p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="experience">
+                <div class="section-heading">
+                    <p class="eyebrow">Experience</p>
+                    <h2>Internship work that already reflects delivery under constraints.</h2>
+                </div>
+                <div class="experience-grid">
+                    <article class="experience-card">
+                        <span class="surface-label">Jun 2025 to Sep 2025</span>
+                        <h3>Lead Java Intern at Yahweh Software Solutions</h3>
+                        <p>Worked on the EduDibon platform with Java, Spring Boot, MySQL, and backend integration across multiple user roles.</p>
+                        <ul>
+                            <li>Improved timetable generation speed by 35%.</li>
+                            <li>Handled scheduling logic and module integration.</li>
+                            <li>Worked with production-oriented backend flows.</li>
                         </ul>
-                    </div>
+                    </article>
+                    <article class="experience-card">
+                        <span class="surface-label">Jan 2025</span>
+                        <h3>Flutter Intern at Smart Stack Technologies</h3>
+                        <p>Contributed to a billing application used for daily transactions and operational workflows.</p>
+                        <ul>
+                            <li>Supported a Flutter billing system with 100+ daily transactions.</li>
+                            <li>Reduced manual billing effort by 25%.</li>
+                            <li>Focused on interface flow and practical app delivery.</li>
+                        </ul>
+                    </article>
                 </div>
-                <div class="relative pl-12 group reveal" style="transition-delay: 0.2s;">
-                    <div class="timeline-line"></div>
-                    <div class="timeline-dot" style="background: var(--secondary); box-shadow: 0 0 20px rgba(255,184,28,0.3);"></div>
-                    <div class="timeline-card bg-surface-container-low p-8 md:p-10 rounded-2xl group-hover:bg-surface-container transition-all duration-500">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-5 gap-3">
-                            <h3 class="text-xl md:text-2xl font-black text-on-surface uppercase tracking-tight">Flutter Intern</h3>
-                            <span class="text-[9px] font-black px-4 py-1.5 bg-surface rounded-full text-secondary uppercase tracking-[0.2em] border border-secondary/15" style="font-family: 'JetBrains Mono', monospace;">Jan 2025 – Present</span>
-                        </div>
-                        <div class="text-secondary font-black uppercase tracking-widest text-[11px] mb-5">Smart Stack Technologies</div>
-                        <p class="text-on-surface-variant text-sm font-medium leading-relaxed opacity-90">
-                            Crafting cross-platform mobile experiences with Dart and Flutter, focusing on state management and reactive UI architectures.
+            </section>
+
+            <section class="section reveal" id="contact">
+                <div class="contact-panel">
+                    <div class="contact-copy">
+                        <p class="eyebrow">Contact</p>
+                        <h2>Available for internships, placements, and high-learning engineering teams.</h2>
+                        <p>
+                            If you are hiring for software engineering, full-stack, Flutter, backend, or AI-adjacent roles, I would be glad to connect.
                         </p>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════
-         EDUCATION & INTERESTS
-         ════════════════════════════════════════════ -->
-    <section class="py-32 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="md:col-span-2 bg-surface-container-low p-10 md:p-12 rounded-2xl border border-white/[0.04] reveal-left">
-                    <h2 class="text-3xl font-black tracking-tighter text-on-surface mb-10 uppercase">Education</h2>
-                    <div class="space-y-10">
-                        <div class="flex gap-6 md:gap-8 group">
-                            <div class="edu-icon w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-surface-container flex items-center justify-center shrink-0 border border-white/[0.04] group-hover:border-primary/30 transition-all shadow-xl">
-                                <span class="material-symbols-outlined text-primary text-2xl md:text-3xl">school</span>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="text-lg md:text-xl font-black text-on-surface group-hover:text-primary transition-colors duration-500">PSG Institute of Technology</h4>
-                                <p class="text-sm font-medium text-on-surface-variant mb-3">B.Tech Computer Science & Business Systems</p>
-                                <div class="text-[10px] font-black text-primary uppercase tracking-[0.2em] bg-primary/5 inline-block px-3 py-1 rounded-md border border-primary/10">CGPA 8.59</div>
-                            </div>
-                        </div>
-                        <div class="flex gap-6 md:gap-8 group">
-                            <div class="edu-icon w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-surface-container flex items-center justify-center shrink-0 border border-white/[0.04] group-hover:border-secondary/30 transition-all shadow-xl">
-                                <span class="material-symbols-outlined text-secondary text-2xl md:text-3xl">workspace_premium</span>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="text-lg md:text-xl font-black text-on-surface group-hover:text-secondary transition-colors duration-500">SSM School</h4>
-                                <p class="text-sm font-medium text-on-surface-variant mb-3">High School Education</p>
-                                <div class="flex gap-5">
-                                    <div class="text-[9px] font-black uppercase tracking-[0.2em] text-stone-500">Class XII: <span class="text-on-surface">88.2%</span></div>
-                                    <div class="text-[9px] font-black uppercase tracking-[0.2em] text-stone-500">Class X: <span class="text-on-surface">91.6%</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Interests -->
-                <div class="bg-surface-container-high p-10 md:p-12 rounded-2xl flex flex-col justify-between border border-white/[0.04] reveal-right shadow-2xl">
-                    <div>
-                        <h2 class="text-3xl font-black tracking-tighter text-on-surface mb-8 uppercase">Interests</h2>
-                        <div class="flex flex-wrap gap-3">
-                            <span class="interest-tag px-5 py-2.5 bg-white/[0.03] rounded-xl text-[10px] font-black uppercase tracking-widest text-on-surface-variant border border-white/[0.06]">AI/Emerging Tech</span>
-                            <span class="interest-tag px-5 py-2.5 bg-white/[0.03] rounded-xl text-[10px] font-black uppercase tracking-widest text-on-surface-variant border border-white/[0.06]">Networks</span>
-                            <span class="interest-tag px-5 py-2.5 bg-white/[0.03] rounded-xl text-[10px] font-black uppercase tracking-widest text-on-surface-variant border border-white/[0.06]">NBA/Sports</span>
-                        </div>
-                    </div>
-                    <div class="mt-10 overflow-hidden rounded-2xl relative group h-40">
-                        <img alt="Basketball" class="w-full h-full object-cover grayscale opacity-25 group-hover:grayscale-0 group-hover:opacity-60 transition-all duration-700" src="output.jpg"/>
-                        <div class="absolute inset-0 bg-gradient-to-t from-surface-container-high/90 via-transparent to-transparent"></div>
-                        <div class="absolute inset-0 flex items-end justify-start p-4 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                             <span class="text-[9px] font-black uppercase tracking-[0.3em] text-white/80">Focus & Drive</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════
-         CONTACT SECTION
-         ════════════════════════════════════════════ -->
-    <section class="py-32 px-6 bg-surface-container-lowest" id="contact">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                <div class="reveal-left">
-                    <span class="text-primary/70 text-xs font-black tracking-[0.4em] uppercase mb-6 block" style="font-family: 'JetBrains Mono', monospace;">// Collaborate</span>
-                    <h2 class="text-5xl md:text-7xl font-black tracking-tight text-on-surface mb-10 leading-none">Start a<br>Project</h2>
-                    <p class="text-on-surface-variant font-medium text-lg mb-14 max-w-md">
-                        Whether you have a unique vision or want to discuss a partnership, I'm ready to build it.
-                    </p>
-                    <div class="space-y-8">
-                        <a href="mailto:sachinram6363@gmail.com" class="contact-link flex items-center gap-6 group">
-                            <div class="contact-icon w-14 h-14 rounded-full bg-surface-container-low flex items-center justify-center border border-white/[0.06] group-hover:border-primary/30 shadow-lg">
-                                <span class="material-symbols-outlined text-primary text-2xl">mail</span>
-                            </div>
-                            <div>
-                                <div class="text-[10px] uppercase tracking-widest text-stone-500 font-black mb-1">Email Me</div>
-                                <div class="text-lg font-black text-on-surface group-hover:text-primary transition-colors duration-500">sachinram6363@gmail.com</div>
-                            </div>
+                    <div class="contact-links">
+                        <a href="mailto:sachinram6363@gmail.com">
+                            <span>Email</span>
+                            <strong>sachinram6363@gmail.com</strong>
                         </a>
-                        <a href="tel:+919789010679" class="contact-link flex items-center gap-6 group">
-                            <div class="contact-icon w-14 h-14 rounded-full bg-surface-container-low flex items-center justify-center border border-white/[0.06] group-hover:border-secondary/30 shadow-lg">
-                                <span class="material-symbols-outlined text-secondary text-2xl">call</span>
-                            </div>
-                            <div>
-                                <div class="text-[10px] uppercase tracking-widest text-stone-500 font-black mb-1">Direct Line</div>
-                                <div class="text-lg font-black text-on-surface group-hover:text-secondary transition-colors duration-500">+91 97890 10679</div>
-                            </div>
+                        <a href="tel:+919789010679">
+                            <span>Phone</span>
+                            <strong>+91 97890 10679</strong>
+                        </a>
+                        <a href="https://github.com/SachinRam18/" target="_blank" rel="noreferrer">
+                            <span>GitHub</span>
+                            <strong>github.com/SachinRam18</strong>
+                        </a>
+                        <a href="https://linkedin.com/in/sachinram" target="_blank" rel="noreferrer">
+                            <span>LinkedIn</span>
+                            <strong>linkedin.com/in/sachinram</strong>
                         </a>
                     </div>
                 </div>
-                <div class="reveal-right bg-surface-container-low p-10 md:p-12 rounded-3xl glass-panel relative overflow-hidden border border-white/[0.04] shadow-3xl">
-                    <form class="space-y-6 relative z-10" onsubmit="event.preventDefault();">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-2">
-                                <label class="text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 ml-1">Identity</label>
-                                <input class="form-input w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-5 py-4 focus:border-primary focus:ring-1 focus:ring-primary/20 text-on-surface transition-all placeholder:text-stone-700 font-semibold text-sm" placeholder="Your Name" type="text" required/>
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 ml-1">Contact</label>
-                                <input class="form-input w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-5 py-4 focus:border-primary focus:ring-1 focus:ring-primary/20 text-on-surface transition-all placeholder:text-stone-700 font-semibold text-sm" placeholder="Your Email" type="email" required/>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 ml-1">Briefing</label>
-                            <textarea class="form-input w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-5 py-4 focus:border-primary focus:ring-1 focus:ring-primary/20 text-on-surface transition-all placeholder:text-stone-700 font-semibold text-sm" placeholder="Project details..." rows="5" required></textarea>
-                        </div>
-                        <button class="btn-submit w-full py-4 bg-gradient-to-r from-[#e32636] to-[#b30000] text-white font-black uppercase tracking-[0.2em] text-xs rounded-xl shadow-[0_8px_30px_rgba(227,38,54,0.2)] active:scale-95" type="submit">
-                            Initialize Project
-                        </button>
-                    </form>
-                    <div class="absolute -top-32 -right-32 w-64 h-64 bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
-                    <div class="absolute -bottom-20 -left-20 w-48 h-48 bg-secondary/5 blur-[100px] rounded-full pointer-events-none"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════
-         FOOTER
-         ════════════════════════════════════════════ -->
-    <footer class="bg-stone-950 border-t border-white/[0.03] py-14">
-        <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-8">
-            <div class="text-xl font-black tracking-tighter text-stone-100">SACHIN RAM<span class="text-primary">.</span></div>
-            <div class="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-700 text-center">
-                © 2026 Crafted with Cinematic Precision
-            </div>
-            <div class="flex gap-8">
-                <a class="text-stone-500 hover:text-primary transition-all text-[10px] font-black uppercase tracking-widest" href="https://github.com/SachinRam18/" target="_blank">GitHub</a>
-                <a class="text-stone-500 hover:text-secondary transition-all text-[10px] font-black uppercase tracking-widest" href="https://linkedin.com/in/sachinram" target="_blank">LinkedIn</a>
-            </div>
-        </div>
-    </footer>
+            </section>
+        </main>
+    </div>
 
     <script src="script.js"></script>
 </body>
